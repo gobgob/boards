@@ -2172,6 +2172,8 @@ Based on the following sources:
 <part name="GND117" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND118" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND119" library="SparkFun" deviceset="GND" device=""/>
+<part name="5V1" library="pinhead" deviceset="PINHD-1X2" device=""/>
+<part name="GND120" library="SparkFun" deviceset="GND" device=""/>
 </parts>
 <sheets>
 <sheet>
@@ -2522,6 +2524,8 @@ Based on the following sources:
 <instance part="GND117" gate="1" x="548.64" y="213.36" rot="R180"/>
 <instance part="GND118" gate="1" x="563.88" y="213.36" rot="R180"/>
 <instance part="GND119" gate="1" x="579.12" y="213.36" rot="R180"/>
+<instance part="5V1" gate="G$1" x="386.08" y="236.22"/>
+<instance part="GND120" gate="1" x="375.92" y="228.6"/>
 </instances>
 <busses>
 </busses>
@@ -3766,6 +3770,12 @@ Based on the following sources:
 <wire x1="579.12" y1="203.2" x2="579.12" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND119" gate="1" pin="GND"/>
 </segment>
+<segment>
+<pinref part="5V1" gate="G$1" pin="2"/>
+<wire x1="383.54" y1="236.22" x2="375.92" y2="236.22" width="0.1524" layer="91"/>
+<wire x1="375.92" y1="236.22" x2="375.92" y2="231.14" width="0.1524" layer="91"/>
+<pinref part="GND120" gate="1" pin="GND"/>
+</segment>
 </net>
 <net name="DI" class="0">
 <segment>
@@ -4530,6 +4540,11 @@ Based on the following sources:
 <wire x1="530.86" y1="220.98" x2="530.86" y2="228.6" width="0.1524" layer="91"/>
 <junction x="530.86" y="220.98"/>
 <label x="530.86" y="228.6" size="1.778" layer="95" rot="R90" xref="yes"/>
+</segment>
+<segment>
+<pinref part="5V1" gate="G$1" pin="1"/>
+<wire x1="383.54" y1="238.76" x2="375.92" y2="238.76" width="0.1524" layer="91"/>
+<label x="375.92" y="238.76" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 </net>
 </nets>
