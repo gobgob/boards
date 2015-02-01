@@ -2156,14 +2156,14 @@ Based on the following sources:
 <part name="GND110" library="SparkFun" deviceset="GND" device=""/>
 <part name="5V" library="pinhead" deviceset="PINHD-1X2" device=""/>
 <part name="GND111" library="SparkFun" deviceset="GND" device=""/>
-<part name="JP2" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP3" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP4" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP5" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP6" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP7" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP8" library="pinhead" deviceset="PINHD-1X3" device=""/>
-<part name="JP9" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT1" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT2" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT3" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT4" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT5" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT6" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT7" library="pinhead" deviceset="PINHD-1X3" device=""/>
+<part name="OUTPUT8" library="pinhead" deviceset="PINHD-1X3" device=""/>
 <part name="GND112" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND113" library="SparkFun" deviceset="GND" device=""/>
 <part name="GND114" library="SparkFun" deviceset="GND" device=""/>
@@ -2506,14 +2506,14 @@ Based on the following sources:
 <instance part="GND110" gate="1" x="411.48" y="208.28"/>
 <instance part="5V" gate="G$1" x="386.08" y="215.9"/>
 <instance part="GND111" gate="1" x="375.92" y="208.28"/>
-<instance part="JP2" gate="A" x="474.98" y="205.74" rot="R90"/>
-<instance part="JP3" gate="A" x="490.22" y="205.74" rot="R90"/>
-<instance part="JP4" gate="A" x="505.46" y="205.74" rot="R90"/>
-<instance part="JP5" gate="A" x="520.7" y="205.74" rot="R90"/>
-<instance part="JP6" gate="A" x="535.94" y="205.74" rot="R90"/>
-<instance part="JP7" gate="A" x="551.18" y="205.74" rot="R90"/>
-<instance part="JP8" gate="A" x="566.42" y="205.74" rot="R90"/>
-<instance part="JP9" gate="A" x="581.66" y="205.74" rot="R90"/>
+<instance part="OUTPUT1" gate="A" x="474.98" y="205.74" rot="R90"/>
+<instance part="OUTPUT2" gate="A" x="490.22" y="205.74" rot="R90"/>
+<instance part="OUTPUT3" gate="A" x="505.46" y="205.74" rot="R90"/>
+<instance part="OUTPUT4" gate="A" x="520.7" y="205.74" rot="R90"/>
+<instance part="OUTPUT5" gate="A" x="535.94" y="205.74" rot="R90"/>
+<instance part="OUTPUT6" gate="A" x="551.18" y="205.74" rot="R90"/>
+<instance part="OUTPUT7" gate="A" x="566.42" y="205.74" rot="R90"/>
+<instance part="OUTPUT8" gate="A" x="581.66" y="205.74" rot="R90"/>
 <instance part="GND112" gate="1" x="533.4" y="213.36" rot="R180"/>
 <instance part="GND113" gate="1" x="487.68" y="213.36" rot="R180"/>
 <instance part="GND114" gate="1" x="472.44" y="213.36" rot="R180"/>
@@ -3727,42 +3727,42 @@ Based on the following sources:
 <pinref part="GND111" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP3" gate="A" pin="1"/>
+<pinref part="OUTPUT2" gate="A" pin="1"/>
 <wire x1="487.68" y1="203.2" x2="487.68" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND113" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="1"/>
+<pinref part="OUTPUT1" gate="A" pin="1"/>
 <wire x1="472.44" y1="203.2" x2="472.44" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND114" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP4" gate="A" pin="1"/>
+<pinref part="OUTPUT3" gate="A" pin="1"/>
 <wire x1="502.92" y1="203.2" x2="502.92" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND115" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP5" gate="A" pin="1"/>
+<pinref part="OUTPUT4" gate="A" pin="1"/>
 <wire x1="518.16" y1="203.2" x2="518.16" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND116" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP6" gate="A" pin="1"/>
+<pinref part="OUTPUT5" gate="A" pin="1"/>
 <wire x1="533.4" y1="203.2" x2="533.4" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND112" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP7" gate="A" pin="1"/>
+<pinref part="OUTPUT6" gate="A" pin="1"/>
 <wire x1="548.64" y1="203.2" x2="548.64" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND117" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP8" gate="A" pin="1"/>
+<pinref part="OUTPUT7" gate="A" pin="1"/>
 <wire x1="563.88" y1="203.2" x2="563.88" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND118" gate="1" pin="GND"/>
 </segment>
 <segment>
-<pinref part="JP9" gate="A" pin="1"/>
+<pinref part="OUTPUT8" gate="A" pin="1"/>
 <wire x1="579.12" y1="203.2" x2="579.12" y2="210.82" width="0.1524" layer="91"/>
 <pinref part="GND119" gate="1" pin="GND"/>
 </segment>
@@ -4418,7 +4418,7 @@ Based on the following sources:
 <net name="N$42" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B1"/>
-<pinref part="JP2" gate="A" pin="2"/>
+<pinref part="OUTPUT1" gate="A" pin="2"/>
 <wire x1="454.66" y1="195.58" x2="474.98" y2="195.58" width="0.1524" layer="91"/>
 <wire x1="474.98" y1="195.58" x2="474.98" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4426,7 +4426,7 @@ Based on the following sources:
 <net name="N$54" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B2"/>
-<pinref part="JP3" gate="A" pin="2"/>
+<pinref part="OUTPUT2" gate="A" pin="2"/>
 <wire x1="454.66" y1="193.04" x2="490.22" y2="193.04" width="0.1524" layer="91"/>
 <wire x1="490.22" y1="193.04" x2="490.22" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4434,7 +4434,7 @@ Based on the following sources:
 <net name="N$55" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B3"/>
-<pinref part="JP4" gate="A" pin="2"/>
+<pinref part="OUTPUT3" gate="A" pin="2"/>
 <wire x1="454.66" y1="190.5" x2="505.46" y2="190.5" width="0.1524" layer="91"/>
 <wire x1="505.46" y1="190.5" x2="505.46" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4442,7 +4442,7 @@ Based on the following sources:
 <net name="N$56" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B4"/>
-<pinref part="JP5" gate="A" pin="2"/>
+<pinref part="OUTPUT4" gate="A" pin="2"/>
 <wire x1="454.66" y1="187.96" x2="520.7" y2="187.96" width="0.1524" layer="91"/>
 <wire x1="520.7" y1="187.96" x2="520.7" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4450,7 +4450,7 @@ Based on the following sources:
 <net name="N$57" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B5"/>
-<pinref part="JP6" gate="A" pin="2"/>
+<pinref part="OUTPUT5" gate="A" pin="2"/>
 <wire x1="454.66" y1="185.42" x2="535.94" y2="185.42" width="0.1524" layer="91"/>
 <wire x1="535.94" y1="185.42" x2="535.94" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4458,7 +4458,7 @@ Based on the following sources:
 <net name="N$58" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B6"/>
-<pinref part="JP7" gate="A" pin="2"/>
+<pinref part="OUTPUT6" gate="A" pin="2"/>
 <wire x1="454.66" y1="182.88" x2="551.18" y2="182.88" width="0.1524" layer="91"/>
 <wire x1="551.18" y1="182.88" x2="551.18" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4466,7 +4466,7 @@ Based on the following sources:
 <net name="N$59" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B7"/>
-<pinref part="JP8" gate="A" pin="2"/>
+<pinref part="OUTPUT7" gate="A" pin="2"/>
 <wire x1="454.66" y1="180.34" x2="566.42" y2="180.34" width="0.1524" layer="91"/>
 <wire x1="566.42" y1="180.34" x2="566.42" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4474,7 +4474,7 @@ Based on the following sources:
 <net name="N$60" class="0">
 <segment>
 <pinref part="IC1" gate="A" pin="B8"/>
-<pinref part="JP9" gate="A" pin="2"/>
+<pinref part="OUTPUT8" gate="A" pin="2"/>
 <wire x1="454.66" y1="177.8" x2="581.66" y2="177.8" width="0.1524" layer="91"/>
 <wire x1="581.66" y1="177.8" x2="581.66" y2="203.2" width="0.1524" layer="91"/>
 </segment>
@@ -4497,33 +4497,33 @@ Based on the following sources:
 <label x="375.92" y="218.44" size="1.778" layer="95" rot="R180" xref="yes"/>
 </segment>
 <segment>
-<pinref part="JP2" gate="A" pin="3"/>
+<pinref part="OUTPUT1" gate="A" pin="3"/>
 <wire x1="477.52" y1="203.2" x2="477.52" y2="220.98" width="0.1524" layer="91"/>
-<pinref part="JP3" gate="A" pin="3"/>
+<pinref part="OUTPUT2" gate="A" pin="3"/>
 <wire x1="477.52" y1="220.98" x2="492.76" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="492.76" y1="220.98" x2="492.76" y2="203.2" width="0.1524" layer="91"/>
-<pinref part="JP4" gate="A" pin="3"/>
+<pinref part="OUTPUT3" gate="A" pin="3"/>
 <wire x1="492.76" y1="220.98" x2="508" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="508" y1="220.98" x2="508" y2="203.2" width="0.1524" layer="91"/>
 <junction x="492.76" y="220.98"/>
-<pinref part="JP5" gate="A" pin="3"/>
+<pinref part="OUTPUT4" gate="A" pin="3"/>
 <wire x1="508" y1="220.98" x2="523.24" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="523.24" y1="220.98" x2="523.24" y2="203.2" width="0.1524" layer="91"/>
 <junction x="508" y="220.98"/>
-<pinref part="JP6" gate="A" pin="3"/>
+<pinref part="OUTPUT5" gate="A" pin="3"/>
 <wire x1="523.24" y1="220.98" x2="530.86" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="530.86" y1="220.98" x2="538.48" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="538.48" y1="220.98" x2="538.48" y2="203.2" width="0.1524" layer="91"/>
 <junction x="523.24" y="220.98"/>
-<pinref part="JP7" gate="A" pin="3"/>
+<pinref part="OUTPUT6" gate="A" pin="3"/>
 <wire x1="538.48" y1="220.98" x2="553.72" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="553.72" y1="220.98" x2="553.72" y2="203.2" width="0.1524" layer="91"/>
 <junction x="538.48" y="220.98"/>
-<pinref part="JP8" gate="A" pin="3"/>
+<pinref part="OUTPUT7" gate="A" pin="3"/>
 <wire x1="553.72" y1="220.98" x2="568.96" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="568.96" y1="220.98" x2="568.96" y2="203.2" width="0.1524" layer="91"/>
 <junction x="553.72" y="220.98"/>
-<pinref part="JP9" gate="A" pin="3"/>
+<pinref part="OUTPUT8" gate="A" pin="3"/>
 <wire x1="568.96" y1="220.98" x2="584.2" y2="220.98" width="0.1524" layer="91"/>
 <wire x1="584.2" y1="220.98" x2="584.2" y2="203.2" width="0.1524" layer="91"/>
 <junction x="568.96" y="220.98"/>
