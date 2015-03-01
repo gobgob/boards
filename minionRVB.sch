@@ -2182,7 +2182,6 @@ Based on the following sources:
 <part name="C58" library="SparkFun" deviceset="CAP" device="0603-CAP" value="0.1uF"/>
 <part name="C59" library="SparkFun" deviceset="CAP" device="0603-CAP" value="0.1uF"/>
 <part name="C60" library="SparkFun" deviceset="CAP" device="0603-CAP" value="0.1uF"/>
-<part name="P+107" library="SparkFun" deviceset="VCC" device=""/>
 <part name="GND121" library="SparkFun" deviceset="GND" device=""/>
 </parts>
 <sheets>
@@ -2544,7 +2543,6 @@ Based on the following sources:
 <instance part="C58" gate="G$1" x="523.24" y="157.48" rot="R180"/>
 <instance part="C59" gate="G$1" x="533.4" y="157.48" rot="R180"/>
 <instance part="C60" gate="G$1" x="543.56" y="157.48" rot="R180"/>
-<instance part="P+107" gate="1" x="508" y="165.1"/>
 <instance part="GND121" gate="1" x="508" y="142.24"/>
 </instances>
 <busses>
@@ -3132,33 +3130,6 @@ Based on the following sources:
 <pinref part="INPUT" gate="G$1" pin="2"/>
 <pinref part="P+4" gate="1" pin="VCC"/>
 <wire x1="86.36" y1="101.6" x2="91.44" y2="101.6" width="0.1524" layer="91"/>
-</segment>
-<segment>
-<pinref part="C53" gate="G$1" pin="2"/>
-<pinref part="C54" gate="G$1" pin="2"/>
-<wire x1="472.44" y1="160.02" x2="482.6" y2="160.02" width="0.1524" layer="91"/>
-<pinref part="C55" gate="G$1" pin="2"/>
-<wire x1="482.6" y1="160.02" x2="492.76" y2="160.02" width="0.1524" layer="91"/>
-<junction x="482.6" y="160.02"/>
-<pinref part="C56" gate="G$1" pin="2"/>
-<wire x1="492.76" y1="160.02" x2="502.92" y2="160.02" width="0.1524" layer="91"/>
-<junction x="492.76" y="160.02"/>
-<pinref part="C57" gate="G$1" pin="2"/>
-<wire x1="502.92" y1="160.02" x2="508" y2="160.02" width="0.1524" layer="91"/>
-<junction x="502.92" y="160.02"/>
-<pinref part="C58" gate="G$1" pin="2"/>
-<wire x1="508" y1="160.02" x2="513.08" y2="160.02" width="0.1524" layer="91"/>
-<wire x1="513.08" y1="160.02" x2="523.24" y2="160.02" width="0.1524" layer="91"/>
-<junction x="513.08" y="160.02"/>
-<pinref part="C59" gate="G$1" pin="2"/>
-<wire x1="523.24" y1="160.02" x2="533.4" y2="160.02" width="0.1524" layer="91"/>
-<junction x="523.24" y="160.02"/>
-<pinref part="C60" gate="G$1" pin="2"/>
-<wire x1="533.4" y1="160.02" x2="543.56" y2="160.02" width="0.1524" layer="91"/>
-<junction x="533.4" y="160.02"/>
-<wire x1="508" y1="160.02" x2="508" y2="165.1" width="0.1524" layer="91"/>
-<junction x="508" y="160.02"/>
-<pinref part="P+107" gate="1" pin="VCC"/>
 </segment>
 </net>
 <net name="GND" class="0">
@@ -4619,6 +4590,33 @@ Based on the following sources:
 <pinref part="5V1" gate="G$1" pin="1"/>
 <wire x1="383.54" y1="238.76" x2="375.92" y2="238.76" width="0.1524" layer="91"/>
 <label x="375.92" y="238.76" size="1.778" layer="95" rot="R180" xref="yes"/>
+</segment>
+<segment>
+<pinref part="C53" gate="G$1" pin="2"/>
+<pinref part="C54" gate="G$1" pin="2"/>
+<wire x1="472.44" y1="160.02" x2="482.6" y2="160.02" width="0.1524" layer="91"/>
+<pinref part="C55" gate="G$1" pin="2"/>
+<wire x1="482.6" y1="160.02" x2="492.76" y2="160.02" width="0.1524" layer="91"/>
+<junction x="482.6" y="160.02"/>
+<pinref part="C56" gate="G$1" pin="2"/>
+<wire x1="492.76" y1="160.02" x2="502.92" y2="160.02" width="0.1524" layer="91"/>
+<junction x="492.76" y="160.02"/>
+<pinref part="C57" gate="G$1" pin="2"/>
+<wire x1="502.92" y1="160.02" x2="508" y2="160.02" width="0.1524" layer="91"/>
+<junction x="502.92" y="160.02"/>
+<pinref part="C58" gate="G$1" pin="2"/>
+<wire x1="508" y1="160.02" x2="513.08" y2="160.02" width="0.1524" layer="91"/>
+<wire x1="513.08" y1="160.02" x2="523.24" y2="160.02" width="0.1524" layer="91"/>
+<junction x="513.08" y="160.02"/>
+<pinref part="C59" gate="G$1" pin="2"/>
+<wire x1="523.24" y1="160.02" x2="533.4" y2="160.02" width="0.1524" layer="91"/>
+<junction x="523.24" y="160.02"/>
+<pinref part="C60" gate="G$1" pin="2"/>
+<wire x1="533.4" y1="160.02" x2="543.56" y2="160.02" width="0.1524" layer="91"/>
+<junction x="533.4" y="160.02"/>
+<wire x1="508" y1="160.02" x2="508" y2="165.1" width="0.1524" layer="91"/>
+<junction x="508" y="160.02"/>
+<label x="508" y="165.1" size="1.778" layer="95" rot="R90" xref="yes"/>
 </segment>
 </net>
 </nets>
