@@ -71,3 +71,12 @@ void display_frame(frame_t * frame)
     }
     leds.show();    
 }
+
+void display_color(pixel_t color)
+{
+    int i;
+    for(i=0; i<LED_COUNT_PER_EYE; i++){
+        leds.setPixel(i, color);
+    }
+    leds.show();
+}
