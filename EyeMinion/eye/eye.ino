@@ -14,7 +14,7 @@ pixel_t adujst_pixel_luminosity(pixel_t pixel_in)
     int r = (((pixel_in >> 16) & 0xFF)*LUMINOSITY_PERCENT)/100;
     int g = (((pixel_in >>  8) & 0xFF)*LUMINOSITY_PERCENT)/100;
     int b = (((pixel_in >>  0) & 0xFF)*LUMINOSITY_PERCENT)/100;
-    return (r << 16)|(r << 8)|(b << 0);
+    return (r << 16)|(g << 8)|(b << 0);
 }
 
 uint8_t reverse_table [52][2] {
