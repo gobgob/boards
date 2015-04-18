@@ -6,7 +6,7 @@ int drawingMemory[LED_COUNT_PER_EYE*6];
 const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(LED_COUNT_PER_EYE, displayMemory, drawingMemory, config);
 
-#define LUMINOSITY_PERCENT 70
+#define LUMINOSITY_PERCENT 30
 
 pixel_t adujst_pixel_luminosity(pixel_t pixel_in)
 {
@@ -66,7 +66,7 @@ void display_frame(frame_t * frame)
     for(i=0; i<LED_COUNT_PER_EYE; i++){
         pixel_t pix = (*frame)[reverse_table[i][0]][reverse_table[i][1]];
     Serial.println(pix);
-        //pix = adujst_pixel_luminosity(pix);
+        pix = adujst_pixel_luminosity(pix);
         leds.setPixel(i, pix);
     }
     leds.show();    
@@ -75,6 +75,7 @@ void display_frame(frame_t * frame)
 void display_color(pixel_t color)
 {
     int i;
+    color = adujst_pixel_luminosity(color);
     for(i=0; i<LED_COUNT_PER_EYE; i++){
         leds.setPixel(i, color);
     }
