@@ -39,7 +39,7 @@ uint8_t reverse_table [52][2] {
  * @param sprite_t *sprite
  * @param uint8_t [offset_x = 0]
  * @param uint8_t [offset_y = 0]
- * @param uint8_t [loop = 1]
+ * @param uint8_t [loop = 0]
  **/
 void display_sprite(sprite_t *sprite, uint8_t offset_x = 0, uint8_t offset_y = 0, uint8_t loop = 0)
 {
