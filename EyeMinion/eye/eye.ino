@@ -136,6 +136,24 @@ sprite_t arrow_top = {
     {0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000}
 };
 
+// ANIMATIONS
+#define K2000 1
+void animation(int anim)
+{
+    switch(anim)
+    {
+        case K2000:
+            for (int i = 1; i < 8; i++){
+                display_row(0xFF0000, i);
+                delay(70-i*3);
+            }
+            for (int i = 8; i > 0 ; i--){
+                display_row(0xFF0000, i);
+                delay(70-i*3);
+            }
+            break;
+    }
+}
 
 void setup()
 {
