@@ -43,11 +43,11 @@ uint8_t reverse_table [52][2] {
  **/
 void display_sprite(sprite_t *sprite, uint8_t offset_x = 0, uint8_t offset_y = 0, uint8_t loop = 0)
 {
-    int i;
-    for (i=0; i<LED_COUNT_PER_EYE; i++) {
+    for (int i=0; i<LED_COUNT_PER_EYE; i++) {
         pixel_t pix;
         bool is_in_matrice = (reverse_table[i][0] + offset_y >= 0 && reverse_table[i][0] + offset_y < LINE_COUNT
                       && reverse_table[i][1] + offset_x >= 0 && reverse_table[i][1] + offset_x < ROW_COUNT);
+
         if (loop || is_in_matrice) {
             pix = (*sprite)[(reverse_table[i][0] + offset_y) % LINE_COUNT][(reverse_table[i][1] + offset_x) % ROW_COUNT];
             pix = adjust_pixel_luminosity(pix);
@@ -166,9 +166,8 @@ void rainbow(int phaseShift, int cycleTime)
 {
   int color, x, y, offset, wait;
 
-  wait = cycleTime * 1000 / LED_COUNT_PER_EYE;
+  wait = cycleTime / LED_COUNT_PER_EYE;
   for (color=0; color < 180; color++) {
-    digitalWrite(1, HIGH);
     for (x=0; x < LED_COUNT_PER_EYE; x++) {
       for (y=0; y < 8; y++) {
         int index = (color + x + y*phaseShift/2) % 180;
@@ -176,8 +175,7 @@ void rainbow(int phaseShift, int cycleTime)
       }
     }
     leds.show();
-    digitalWrite(1, LOW);
-    delayMicroseconds(wait);
+    delay(wait);
   }
 }
 
