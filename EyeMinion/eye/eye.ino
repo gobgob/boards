@@ -39,12 +39,21 @@ uint8_t reverse_table [52][2] {
  * @param sprite_t *sprite
  * @param uint8_t [offset_x = 0]
  * @param uint8_t [offset_y = 0]
+ * @param uint8_t [loop = 1]
  **/
-void display_sprite(sprite_t *sprite, uint8_t offset_x = 0, uint8_t offset_y = 0)
+void display_sprite(sprite_t *sprite, uint8_t offset_x = 0, uint8_t offset_y = 0, uint8_t loop = 0)
 {
     int i;
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
-        pixel_t pix = (*sprite)[(reverse_table[i][0] + offset_y) % LINE_COUNT][(reverse_table[i][1] + offset_x) % ROW_COUNT];
+    for (i=0; i<LED_COUNT_PER_EYE; i++) {
+        pixel_t pix;
+        bool is_in_matrice = (reverse_table[i][0] + offset_y >= 0 && reverse_table[i][0] + offset_y < LINE_COUNT
+                      && reverse_table[i][1] + offset_x >= 0 && reverse_table[i][1] + offset_x < ROW_COUNT);
+        if (loop || is_in_matrice) {
+            pix = (*sprite)[(reverse_table[i][0] + offset_y) % LINE_COUNT][(reverse_table[i][1] + offset_x) % ROW_COUNT];
+            pix = adjust_pixel_luminosity(pix);
+        } else {
+            pix = 0;
+        }
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
     }
