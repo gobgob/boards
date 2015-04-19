@@ -7,6 +7,6 @@
 #define ROW_COUNT 8
 
 typedef uint32_t pixel_t;
-typedef pixel_t frame_t[ROW_COUNT][LINE_COUNT];
+typedef pixel_t sprite_t[ROW_COUNT][LINE_COUNT];
 
 #endif //_OEIL_H_

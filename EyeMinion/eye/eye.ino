@@ -8,9 +8,14 @@ OctoWS2811 leds(LED_COUNT_PER_EYE, displayMemory, drawingMemory, config);
 
 #define LUMINOSITY_PERCENT 30
 
-pixel_t adujst_pixel_luminosity(pixel_t pixel_in)
+/**
+ * Apply luminosity percent to a pixel
+ *
+ * @param  pixel_t pixel_in - pixel to set
+ * @return pixel_t
+ **/
+pixel_t adjust_pixel_luminosity(pixel_t pixel_in)
 {
-    //this could be optimised by using a lookup table calculated once
     int r = (((pixel_in >> 16) & 0xFF)*LUMINOSITY_PERCENT)/100;
     int g = (((pixel_in >>  8) & 0xFF)*LUMINOSITY_PERCENT)/100;
     int b = (((pixel_in >>  0) & 0xFF)*LUMINOSITY_PERCENT)/100;
@@ -25,59 +30,127 @@ uint8_t reverse_table [52][2] {
 {3,0},{3,1},{3,2},{3,3},{3,4},{3,5},{3,6},{3,7},
 {2,7},{2,6},{2,5},{2,4},{2,3},{2,2},{2,1},{2,0},
       {1,1},{1,2},{1,3},{1,4},{1,5},{1,6},
-            {0,5},{0,4},{0,3},{0,2},
+            {0,5},{0,4},{0,3},{0,2}
 };
 
-frame_t test_frame ={
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
-    {0x0F0000,0x00000F,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000,0x0F0000},
+/**
+ * Display a sprite
+ *
+ * @param sprite_t *sprite
+ * @param uint8_t [offset_x = 0]
+ * @param uint8_t [offset_y = 0]
+ **/
+void display_sprite(sprite_t *sprite, uint8_t offset_x = 0, uint8_t offset_y = 0)
+{
+    int i;
+    for(i=0; i<LED_COUNT_PER_EYE; i++){
+        pixel_t pix = (*sprite)[(reverse_table[i][0] + offset_y) % LINE_COUNT][(reverse_table[i][1] + offset_x) % ROW_COUNT];
+        pix = adjust_pixel_luminosity(pix);
+        leds.setPixel(i, pix);
+    }
+    leds.show();
+}
+
+/**
+ * Display a color on all leds
+ *
+ * @param pixel_t color
+ **/
+void display_color(pixel_t color)
+{
+    int i;
+    color = adjust_pixel_luminosity(color);
+    for(i=0; i<LED_COUNT_PER_EYE; i++){
+        leds.setPixel(i, color);
+    }
+    leds.show();
+}
+
+sprite_t sprite_row = {
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0},
+    {1,0,0,0,0,0,0,0}
 };
+
+/**
+ * Display single row in one color
+ *
+ * @param pixel_t color
+ * @param uint8_t row
+ **/
+void display_row(pixel_t color, uint8_t row)
+{
+    int i;
+    for(i=0; i<LED_COUNT_PER_EYE; i++){
+        pixel_t pix = (sprite_row)[reverse_table[i][0]][(reverse_table[i][1] + row) % ROW_COUNT];
+        if (pix) pix = color;
+        pix = adjust_pixel_luminosity(pix);
+        leds.setPixel(i, pix);
+    }
+    leds.show();
+}
+
+sprite_t sprite_line = {
+    {1,1,1,1,1,1,1,1},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0},
+    {0,0,0,0,0,0,0,0}
+};
+
+/**
+ * Display single line in one color
+ *
+ * @param pixel_t color
+ * @param uint8_t line
+ **/
+void display_line(pixel_t color, uint8_t line)
+{
+    int i;
+    for(i=0; i<LED_COUNT_PER_EYE; i++){
+        pixel_t pix = (sprite_line)[(reverse_table[i][0] + line) % LINE_COUNT][reverse_table[i][1]];
+        if (pix) pix = color;
+        pix = adjust_pixel_luminosity(pix);
+        leds.setPixel(i, pix);
+    }
+    leds.show();
+}
+
+// SPRITES
+sprite_t arrow_top = {
+    {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
+    {0x000000,0x000000,0x841686,0x841686,0x841686,0x841686,0x000000,0x000000},
+    {0x000000,0x841686,0x000000,0x841686,0x841686,0x000000,0x841686,0x000000},
+    {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
+    {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
+    {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
+    {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
+    {0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000}
+};
+
 
 void setup()
 {
     pinMode(14, OUTPUT);
     leds.begin();
     leds.show();
-    Serial.begin(9600);
 }
+
+uint8_t lap = 0;
 
 void loop()
 {
-    unsigned long prev_time = 0;
-    unsigned long post_time = 0;
-
-    prev_time = micros();
-    display_frame(&test_frame);
-    post_time = micros();
-    Serial.print("Delay ");
-    Serial.println(post_time - prev_time);
-    delay(1000);
-}
-
-void display_frame(frame_t * frame)
-{
-    int i;
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
-        pixel_t pix = (*frame)[reverse_table[i][0]][reverse_table[i][1]];
-    Serial.println(pix);
-        pix = adujst_pixel_luminosity(pix);
-        leds.setPixel(i, pix);
-    }
-    leds.show();    
-}
-
-void display_color(pixel_t color)
-{
-    int i;
-    color = adujst_pixel_luminosity(color);
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
-        leds.setPixel(i, color);
-    }
-    leds.show();
+    //display_sprite(&arrow_top, 0, lap % 8);
+    //display_color(0x0000FF);
+    display_line(0x002222, lap % 8);
+    delay(100);
+    lap++;
 }
