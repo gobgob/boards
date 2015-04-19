@@ -133,6 +133,54 @@ void display_line(pixel_t color, uint8_t line)
     leds.show();
 }
 
+
+int rainbowColors[180];
+/**
+ * Pre-compute rainbow colors
+ **/
+void precompute_rainbow_colors()
+{
+    for (int i=0; i<180; i++) {
+        int hue = i * 2;
+        int saturation = 100;
+        int lightness = 5;
+        rainbowColors[i] = makeColor(hue, saturation, lightness);
+    }
+}
+
+/**
+ * Display a beautiful rainbow
+ *
+ * @param int phaseShift
+ *   phaseShift is the shift between each row.  phaseShift=0
+ *   causes all rows to show the same colors moving together.
+ *   phaseShift=180 causes each row to be the opposite colors
+ *   as the previous.
+ *
+ * @param int cycleTime
+ *   cycleTime is the number of milliseconds to shift through
+ *   the entire 360 degrees of the color wheel:
+ *   Red -> Orange -> Yellow -> Green -> Blue -> Violet -> Red
+ **/
+void rainbow(int phaseShift, int cycleTime)
+{
+  int color, x, y, offset, wait;
+
+  wait = cycleTime * 1000 / LED_COUNT_PER_EYE;
+  for (color=0; color < 180; color++) {
+    digitalWrite(1, HIGH);
+    for (x=0; x < LED_COUNT_PER_EYE; x++) {
+      for (y=0; y < 8; y++) {
+        int index = (color + x + y*phaseShift/2) % 180;
+        leds.setPixel(x + y*LED_COUNT_PER_EYE, rainbowColors[index]);
+      }
+    }
+    leds.show();
+    digitalWrite(1, LOW);
+    delayMicroseconds(wait);
+  }
+}
+
 // SPRITES
 sprite_t arrow_top = {
     {0x000000,0x000000,0x000000,0x841686,0x841686,0x000000,0x000000,0x000000},
@@ -179,9 +227,10 @@ sprite_t clap_close = {
 };
 
 // ANIMATIONS
-#define K2000 1
-#define HEART 2
-#define CLAP  3
+#define K2000   1
+#define HEART   2
+#define CLAP    3
+#define RAINBOW 4
 void animation(int anim)
 {
     switch(anim)
@@ -212,6 +261,10 @@ void animation(int anim)
             display_sprite(&clap_open);
             delay(500);
             break;
+
+        case RAINBOW:
+            rainbow(100, 2500);
+            break;
     }
 }
 
@@ -220,6 +273,8 @@ void setup()
     pinMode(14, OUTPUT);
     leds.begin();
     leds.show();
+
+    precompute_rainbow_colors();
 }
 
 uint8_t lap = 0;
