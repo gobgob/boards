@@ -208,7 +208,10 @@ void animation(int anim)
             display_sprite(&clap_open);
             delay(500);
             display_sprite(&clap_close);
+            delay(250);
+            display_sprite(&clap_open);
             delay(500);
+            break;
     }
 }
 
