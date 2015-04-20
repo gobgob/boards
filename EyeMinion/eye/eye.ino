@@ -6,7 +6,7 @@ int drawingMemory[LED_COUNT_PER_EYE*6];
 const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(LED_COUNT_PER_EYE, displayMemory, drawingMemory, config);
 
-#define LUMINOSITY_PERCENT 30
+#define LUMINOSITY_PERCENT 10
 
 /**
  * Apply luminosity percent to a pixel
@@ -595,27 +595,9 @@ void setup()
     precompute_rainbow_colors();
 }
 
-sprite_t *abc[] = {&letter_a, &letter_b, &letter_c};
+sprite_t *text_action[] = {&letter_a, &letter_c, &letter_t, &letter_i, &letter_o, &letter_n};
 void loop()
 {
-
-    //for (int i=0; i<LED_COUNT_PER_EYE; i++) {
-    //    pixel_t pix;
-    //    pix = (*abc[0])[(reverse_table[i][0]) % LINE_COUNT][(reverse_table[i][1]) % ROW_COUNT];
-    //    pix = adjust_pixel_luminosity(pix);
-    //    leds.setPixel(i, pix);
-    //}
-    //leds.show();
-    display_text(abc, 3);
-
-    //animation(CLAP);
-    //animation(RAINBOW);
-    // for(int i = -8; i < 8; i++){
-    //   display_sprite(&debug, 0, i);
-    //     delay(100);
-    // }
-    //display_color(0x0000FF);
-    //display_line(0x002222, lap % 8);
-    //delay(100);
-    //lap++;
+    animation(CLAP);
+    display_text(text_action, 6);
 }
