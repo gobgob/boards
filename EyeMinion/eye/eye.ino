@@ -66,7 +66,8 @@ void display_sprite(sprite_t *sprite, int offset_x = 0, int offset_y = 0, bool l
  * Display a text
  *
  * @param sprite_t *text[]
- * @param int text_length
+ * @param int      text_length
+ * @param pixel_t  [color=0xffffff]
  *
  * Example:
  * sprite_t *abc[] = {&letter_a, &letter_b, &letter_c};
@@ -74,7 +75,7 @@ void display_sprite(sprite_t *sprite, int offset_x = 0, int offset_y = 0, bool l
  *  => Display ABC on eye
  *
  **/
-void display_text(sprite_t *text[], int text_length)
+void display_text(sprite_t *text[], int text_length, pixel_t color = 0xffffff)
 {
     for(int offset_x=-8; offset_x<text_length*ROW_COUNT; offset_x++) {
         for (int i=0; i<LED_COUNT_PER_EYE; i++) {
@@ -83,7 +84,7 @@ void display_text(sprite_t *text[], int text_length)
                 int x = reverse_table[i][0];
                 int y = reverse_table[i][1] + offset_x - letter * 6;
                 bool is_in_matrice = (y >= 0 && y < ROW_COUNT);
-                if ( is_in_matrice ) pix |= (*text[letter])[x][y];
+                if ( is_in_matrice && (*text[letter])[x][y] ) pix = color;
             }
             pix = adjust_pixel_luminosity(pix);
             leds.setPixel(i, pix);
