@@ -198,7 +198,7 @@ void precompute_rainbow_colors()
  **/
 void rainbow(int phaseShift, int cycleTime)
 {
-  int color, x, y, offset, wait;
+  int color, x, y, wait;
 
   wait = cycleTime / LED_COUNT_PER_EYE;
   for (color=0; color < 180; color++) {
@@ -544,6 +544,8 @@ sprite_t letter_z = {
     {0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000,0x000000}
 };
 
+sprite_t *text_action[] = { &letter_a, &letter_c, &letter_t, &letter_i, &letter_o, &letter_n };
+
 // ANIMATIONS
 #define K2000   1
 #define HEART   2
@@ -578,12 +580,75 @@ void animation(int anim)
             delay(250);
             display_sprite(&clap_open);
             delay(500);
+			display_text(text_action, 6);
             break;
 
         case RAINBOW:
             rainbow(100, 2500);
             break;
     }
+}
+
+// Serial
+char serialInput[10];
+int serialPrompt = 0;
+int animNum = 0;
+int mode = 3; // Manuel
+
+/**
+ * Capture and parse serial events.
+**/
+void serialEvent()
+{
+	while (Serial.available())
+	{
+		char inChar = (char)Serial.read();
+
+		switch (inChar)
+		{
+		case '0'...'9':
+			serialInput[serialPrompt] = inChar - '0';
+			serialPrompt++;
+			break;
+
+		case '\n':
+			serialExecute();
+			break;
+
+		default:
+			serialInput[serialPrompt] = inChar;
+			serialPrompt++;
+			break;
+		}
+	}
+}
+
+/**
+ * Execute serial command (after `\n` char)
+ * 
+ * # Commands
+ *   ## Animations
+ *   A01 -> animation 1
+ *
+**/
+void serialExecute()
+{
+	switch (serialInput[0])
+	{
+	case 'A': // Animation - `A01` for animation 1
+		animNum = serialInput[1] * 10 + serialInput[2];
+		Serial.print("Run animation ");
+		Serial.println(animNum);
+		break;
+
+	default:
+		Serial.println("Unkwnown command");
+	}
+
+	// Reset var for next instruction
+	for (int i = 0; i < 10; i++)
+		serialInput[i] = 0;
+	serialPrompt = 0;
 }
 
 void setup()
@@ -593,11 +658,11 @@ void setup()
     leds.show();
 
     precompute_rainbow_colors();
+	Serial.begin(9600);
 }
 
-sprite_t *text_action[] = {&letter_a, &letter_c, &letter_t, &letter_i, &letter_o, &letter_n};
+
 void loop()
 {
     animation(CLAP);
-    display_text(text_action, 6);
 }
