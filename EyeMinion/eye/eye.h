@@ -1,6 +1,9 @@
 #ifndef _OEIL_H_
 #define _OEIL_H_
 
+// Utilities
+#define MAX(a,b) (((a)>(b))?(a):(b))
+#define MIN(a,b) (((a)<(b))?(a):(b))
 
 #define LED_COUNT_PER_EYE 52
 #define LINE_COUNT 8
