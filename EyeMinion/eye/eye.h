@@ -8,6 +8,7 @@
 #define LED_COUNT_PER_EYE 52
 #define LINE_COUNT 8
 #define ROW_COUNT 8
+#define EYES_COUNT 2
 
 #define EYE1_PORT 1 // PIN 2
 #define EYE2_PORT 3 // PIN 7

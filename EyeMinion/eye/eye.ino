@@ -79,7 +79,7 @@ void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, 
 void display_text(char * text, pixel_t color = 0xffffff)
 {
     int text_length = strlen(text);
-    for(int offset_x=-16; offset_x<text_length*ROW_COUNT; offset_x++) {
+    for(int offset_x=-(ROW_COUNT * EYES_COUNT); offset_x<text_length*ROW_COUNT; offset_x++) {
         for (int i=0; i<LED_COUNT; i++) {
 			int offset_eye2 = (i > LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
 
