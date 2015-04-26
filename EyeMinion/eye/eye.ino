@@ -68,7 +68,7 @@ void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, 
 /**
  * Display a text
  *
- * @param char *text[]
+ * @param char *text
  * @param pixel_t  [color=0xffffff]
  *
  * Example:
@@ -79,12 +79,14 @@ void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, 
 void display_text(char * text, pixel_t color = 0xffffff)
 {
     int text_length = strlen(text);
-    for(int offset_x=-8; offset_x<text_length*ROW_COUNT; offset_x++) {
-        for (int i=0; i<LED_COUNT_PER_EYE; i++) {
+    for(int offset_x=-16; offset_x<text_length*ROW_COUNT; offset_x++) {
+        for (int i=0; i<LED_COUNT; i++) {
+			int offset_eye2 = (i > LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
+
             pixel_t pix = 0;
             for( int letter=0; letter<text_length; letter++) {
-                int x = reverse_table[i][0];
-                int y = reverse_table[i][1] + offset_x - letter * 6;
+                int x = reverse_table[i%LED_COUNT_PER_EYE][0];
+				int y = reverse_table[i%LED_COUNT_PER_EYE][1] + offset_x - letter * 6 + offset_eye2;
                 sprite_t * sprite_letter = letters[text[letter]];
                 bool is_in_matrice = (y >= 0 && y < ROW_COUNT);
                 if ( is_in_matrice && sprite_letter!=NULL){
