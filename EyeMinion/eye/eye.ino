@@ -40,16 +40,17 @@ const uint8_t reverse_table [52][2] {
  * Display a sprite
  *
  * @param sprite_t *sprite
+ * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
  * @param int [offset_x = 0]
  * @param int [offset_y = 0]
  * @param bool [loop = false]
  **/
-void display_sprite(const sprite_t *sprite, int offset_x = 0, int offset_y = 0, bool loop = false)
+void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, int offset_y = 0, bool loop = false)
 {
-    for (int i=0; i<LED_COUNT_PER_EYE; i++) {
+	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
         pixel_t pix;
-        int x = reverse_table[i][0] - offset_y;
-        int y = reverse_table[i][1] - offset_x;
+		int x = reverse_table[i%LED_COUNT_PER_EYE][0] - offset_y;
+		int y = reverse_table[i%LED_COUNT_PER_EYE][1] - offset_x;
         bool is_in_matrice = (y >= 0 && y < LINE_COUNT && x >= 0 && x < ROW_COUNT);
 
         if (loop || is_in_matrice) {
