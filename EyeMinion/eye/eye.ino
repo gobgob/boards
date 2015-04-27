@@ -61,7 +61,7 @@ void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, 
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
     }
-    leds.show();
+    //leds.show();
 }
 
 /**
@@ -114,7 +114,7 @@ void display_color(pixel_t color, int eye_port = 1)
 	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
         leds.setPixel(i, color);
     }
-    leds.show();
+    //leds.show();
 }
 
 /**
@@ -132,7 +132,7 @@ void display_row(pixel_t color, uint8_t row, int eye_port = 1)
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
     }
-    leds.show();
+    //leds.show();
 }
 
 /**
@@ -151,11 +151,12 @@ void display_line(pixel_t color, uint8_t line, int eye_port = 1)
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
     }
-    leds.show();
+    //leds.show();
 }
 
 
 int rainbowColors[180];
+
 /**
  * Pre-compute rainbow colors
  **/
