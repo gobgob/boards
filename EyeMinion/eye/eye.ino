@@ -205,20 +205,40 @@ void rainbow(int phaseShift, int cycleTime)
 #define HEART   2
 #define CLAP    3
 #define RAINBOW 4
+#define SILON   5
 void animation(int anim)
 {
     switch(anim)
     {
-        case K2000:
+        case SILON:
             for (int i = 1; i < 8; i++){
-                display_row(0xFF0000, i);
-                delay(70-i*3);
+                display_row(0xFF0000, i, EYE1_PORT);
+				display_row(0xFF0000, 8 - i, EYE2_PORT);
+				leds.show();
+                delay(80-i*3);
             }
             for (int i = 8; i > 0 ; i--){
-                display_row(0xFF0000, i);
-                delay(70-i*3);
+                display_row(0xFF0000, i, EYE1_PORT);
+				display_row(0xFF0000, 9 - i , EYE2_PORT);
+				leds.show();
+                delay(80-i*3);
             }
             break;
+		case K2000:
+			// TODO better animation like the movie ;)
+			for (int i = 1; i < 8; i++){
+				display_row(0xFF0000, i, 1);
+				display_row(0xFF0000, 8 - i, 3);
+				leds.show();
+				delay(80 - i * 3);
+			}
+			for (int i = 8; i > 0; i--){
+				display_row(0xFF0000, i, 1);
+				display_row(0xFF0000, 9 - i, 3);
+				leds.show();
+				delay(80 - i * 3);
+			}
+			break;
         case HEART:
             for (int i = 8; i > -1; i--){
                 display_sprite(&heart, 0, i);
