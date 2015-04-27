@@ -106,12 +106,12 @@ void display_text(char * text, pixel_t color = 0xffffff)
  * Display a color on all leds
  *
  * @param pixel_t color
+ * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
  **/
-void display_color(pixel_t color)
+void display_color(pixel_t color, int eye_port = 1)
 {
-    int i;
     color = adjust_pixel_luminosity(color);
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
+	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
         leds.setPixel(i, color);
     }
     leds.show();
@@ -122,12 +122,12 @@ void display_color(pixel_t color)
  *
  * @param pixel_t color
  * @param uint8_t row
+ * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
  **/
-void display_row(pixel_t color, uint8_t row)
+void display_row(pixel_t color, uint8_t row, int eye_port = 1)
 {
-    int i;
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
-        pixel_t pix = (sprite_row)[reverse_table[i][0]][(reverse_table[i][1] + row) % ROW_COUNT];
+	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
+		pixel_t pix = (sprite_row)[reverse_table[i % LED_COUNT_PER_EYE][0]][(reverse_table[i % LED_COUNT_PER_EYE][1] + row) % ROW_COUNT];
         if (pix) pix = color;
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
@@ -140,12 +140,13 @@ void display_row(pixel_t color, uint8_t row)
  *
  * @param pixel_t color
  * @param uint8_t line
+ * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
  **/
-void display_line(pixel_t color, uint8_t line)
+void display_line(pixel_t color, uint8_t line, int eye_port = 1)
 {
     int i;
-    for(i=0; i<LED_COUNT_PER_EYE; i++){
-        pixel_t pix = (sprite_line)[(reverse_table[i][0] + line) % LINE_COUNT][reverse_table[i][1]];
+	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
+		pixel_t pix = (sprite_line)[(reverse_table[i % LED_COUNT_PER_EYE][0] + line) % LINE_COUNT][reverse_table[i % LED_COUNT_PER_EYE][1]];
         if (pix) pix = color;
         pix = adjust_pixel_luminosity(pix);
         leds.setPixel(i, pix);
