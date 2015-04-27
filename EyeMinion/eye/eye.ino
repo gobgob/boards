@@ -8,19 +8,18 @@ int drawingMemory[LED_COUNT_PER_EYE*6];
 const int config = WS2811_GRB | WS2811_800kHz;
 OctoWS2811 leds(LED_COUNT_PER_EYE, displayMemory, drawingMemory, config);
 
-#define LUMINOSITY_PERCENT 10
-
 /**
  * Apply luminosity percent to a pixel
  *
  * @param  pixel_t pixel_in - pixel to set
+ * @param  int [luminosity_percent = 10]
  * @return pixel_t
  **/
-pixel_t adjust_pixel_luminosity(pixel_t pixel_in)
+pixel_t adjust_pixel_luminosity(pixel_t pixel_in, int luminosity_percent = 10)
 {
-    int r = (((pixel_in >> 16) & 0xFF)*LUMINOSITY_PERCENT)/100;
-    int g = (((pixel_in >>  8) & 0xFF)*LUMINOSITY_PERCENT)/100;
-    int b = (((pixel_in >>  0) & 0xFF)*LUMINOSITY_PERCENT)/100;
+    int r = (((pixel_in >> 16) & 0xFF)*luminosity_percent)/100;
+    int g = (((pixel_in >>  8) & 0xFF)*luminosity_percent)/100;
+    int b = (((pixel_in >>  0) & 0xFF)*luminosity_percent)/100;
     return (r << 16)|(g << 8)|(b << 0);
 }
 
