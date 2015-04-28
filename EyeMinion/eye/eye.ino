@@ -39,12 +39,13 @@ const uint8_t reverse_table [52][2] {
  * Display a sprite
  *
  * @param sprite_t *sprite
- * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
- * @param int [offset_x = 0]
- * @param int [offset_y = 0]
- * @param bool [loop = false]
+ * @param int     [eye_port = 1] - Port where eye is connected (1 to 8)
+ * @param int     [offset_x = 0]
+ * @param int     [offset_y = 0]
+ * @param bool    [loop = false]
+ * @param pixel_t [transparent_color = 0xae8fad]
  **/
-void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, int offset_y = 0, bool loop = false)
+void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, int offset_y = 0, bool loop = false, pixel_t transparent_color = 0xae8fad)
 {
 	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
         pixel_t pix;
@@ -53,13 +54,15 @@ void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, 
         bool is_in_matrice = (y >= 0 && y < LINE_COUNT && x >= 0 && x < ROW_COUNT);
 
         if (loop || is_in_matrice) {
-            pix = (*sprite)[x % LINE_COUNT][y % ROW_COUNT];
+			pix = (*sprite)[x % LINE_COUNT][y % ROW_COUNT];
         } else {
             pix = 0;
         }
 
-        pix = adjust_pixel_luminosity(pix);
-        leds.setPixel(i, pix);
+		if (pix != transparent_color) {
+			pix = adjust_pixel_luminosity(pix);
+			leds.setPixel(i, pix);
+		}
     }
     //leds.show();
 }
@@ -144,7 +147,6 @@ void display_row(pixel_t color, uint8_t row, int eye_port = 1)
  **/
 void display_line(pixel_t color, uint8_t line, int eye_port = 1)
 {
-    int i;
 	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i<(LED_COUNT_PER_EYE * eye_port); i++) {
 		pixel_t pix = (sprite_line)[(reverse_table[i % LED_COUNT_PER_EYE][0] + line) % LINE_COUNT][reverse_table[i % LED_COUNT_PER_EYE][1]];
         if (pix) pix = color;
@@ -203,11 +205,15 @@ void rainbow(int phaseShift, int cycleTime)
 
 
 // ANIMATIONS
-#define K2000   1
-#define HEART   2
-#define CLAP    3
-#define RAINBOW 4
-#define SILON   5
+#define K2000       1
+#define HEART       2
+#define CLAP        3
+#define RAINBOW     4
+#define SILON       5
+#define EYES        6
+#define CLOSE_EYES  7
+#define LOOK_AROUND 8
+#define STATIC_EYES 9
 void animation(int anim)
 {
     switch(anim)
@@ -262,6 +268,101 @@ void animation(int anim)
         case RAINBOW:
             rainbow(100, 2500);
             break;
+
+		case EYES:
+			animation(STATIC_EYES);
+			delay(1000);
+			animation(LOOK_AROUND);
+			delay(1000);
+			animation(CLOSE_EYES);
+			animation(CLOSE_EYES);
+			break;
+		case CLOSE_EYES:
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid02, EYE1_PORT);
+			display_sprite(&lid02, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid03, EYE1_PORT);
+			display_sprite(&lid03, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid04, EYE1_PORT);
+			display_sprite(&lid04, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid03, EYE1_PORT);
+			display_sprite(&lid03, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid02, EYE1_PORT);
+			display_sprite(&lid02, EYE2_PORT);
+			leds.show();
+			delay(70);
+
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(70);
+			break;
+		case LOOK_AROUND:
+			for (int i = 0; i < 3; i++) {
+				display_sprite(&iris, EYE1_PORT, i, 0, true);
+				display_sprite(&lid01, EYE1_PORT);
+				display_sprite(&iris, EYE2_PORT, i, 0, true);
+				display_sprite(&lid01, EYE2_PORT);
+				leds.show();
+				delay(100);
+			}
+			delay(200);
+			for (int i = 2; i > -3; i--) {
+				display_sprite(&iris, EYE1_PORT, i, 0, true);
+				display_sprite(&lid01, EYE1_PORT);
+				display_sprite(&iris, EYE2_PORT, i, 0, true);
+				display_sprite(&lid01, EYE2_PORT);
+				leds.show();
+				delay(100);
+			}
+			delay(200);
+			for (int i = -2; i < 1; i++) {
+				display_sprite(&iris, EYE1_PORT, i, 0, true);
+				display_sprite(&lid01, EYE1_PORT);
+				display_sprite(&iris, EYE2_PORT, i, 0, true);
+				display_sprite(&lid01, EYE2_PORT);
+				leds.show();
+				delay(100);
+			}
+			break;
+		case STATIC_EYES:
+			display_sprite(&iris, EYE1_PORT);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			break;
+
     }
 }
 
@@ -340,6 +441,6 @@ void setup()
 
 void loop()
 {
-    animation(CLAP);
-    // serialEvent();
+	//display_text("OH YEAH");
+	animation(EYES);
 }
