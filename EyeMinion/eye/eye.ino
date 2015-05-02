@@ -124,15 +124,22 @@ void display_color(pixel_t color, int eye_port = 1)
  *
  * @param pixel_t color
  * @param uint8_t row
- * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
  **/
-void display_row(pixel_t color, uint8_t row, int eye_port = 1)
+void display_row(pixel_t color, uint8_t row)
 {
-	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i < (LED_COUNT_PER_EYE * eye_port); i++) {
-		pixel_t pix = (sprite_row)[reverse_table[i % LED_COUNT_PER_EYE][0]][(reverse_table[i % LED_COUNT_PER_EYE][1] + row) % ROW_COUNT];
-		if (pix) pix = color;
-		pix = adjust_pixel_luminosity(pix);
-		leds.setPixel(i, pix);
+	for (int i = 0; i < LED_COUNT; i++) {
+		int offset_eye2 = (i >= LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
+		int x = reverse_table[i % LED_COUNT_PER_EYE][0];
+		int y = (reverse_table[i % LED_COUNT_PER_EYE][1] - row + offset_eye2);
+		bool is_in_matrice = (y >= 0 && y < ROW_COUNT);
+		if (is_in_matrice){
+			pixel_t pix = (sprite_row)[x][y];
+			if (pix) {
+				pix = color;
+				pix = adjust_pixel_luminosity(pix);
+				leds.setPixel(i, pix);
+			}
+		}
 	}
 }
 
