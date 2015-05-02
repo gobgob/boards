@@ -293,30 +293,18 @@ void display_clone(const sprite_t &sprite)
  *
  * @param int i
  **/
-void display_k2000_row(int i)
+void display_k2000_row(int i, int sign = 1)
 {
-	display_color(0x000055, EYE1_PORT);
-	display_color(0x000055, EYE2_PORT);
+	display_color(0x110000, EYE1_PORT);
+	display_color(0x110000, EYE2_PORT);
 
-	display_row(0xFF0000, MIN(i, 1), EYE1_PORT);
-	display_row(0xFF0000, MAX(i + 8, 16), EYE2_PORT);
-
-	display_row(0xDD0000, i - 1, EYE1_PORT);
-	display_row(0xDD0000, i + 7, EYE2_PORT);
-
-	display_row(0xAA0000, i - 2, EYE1_PORT);
-	display_row(0xAA0000, i + 6, EYE2_PORT);
-
-	display_row(0xAA0000, i - 3, EYE1_PORT);
-	display_row(0xAA0000, i + 5, EYE2_PORT);
-
-	display_row(0x770000, i - 4, EYE1_PORT);
-	display_row(0x770000, i + 4, EYE2_PORT);
-
-	display_row(0x770000, i - 5, EYE1_PORT);
-	display_row(0x770000, i + 3, EYE2_PORT);
+	//display_row(0xFF0000, MIN(MAX(i, 0), 15));
+	display_row(0xFF0000, i);
+	display_row(0xCC0000, i - (1 * sign));
+	display_row(0xAA0000, i - (2 * sign));
+	display_row(0x550000, i - (3 * sign));
 	leds.show();
-	delay(80 - i * 3);
+	delay(50);
 }
 
 
@@ -336,22 +324,24 @@ void animation(int anim)
 	switch (anim)
 	{
 	case SILON:
-		for (int i = 1; i < 8; i++){
-			display_row(0xFF0000, i, EYE1_PORT);
-			display_row(0xFF0000, 8 - i, EYE2_PORT);
+		for (int i = 0; i < 8; i++){
+			clear();
+			display_row(0xFF0000, i);
+			display_row(0xFF0000, (15 - i));
 			leds.show();
 			delay(80 - i * 3);
 		}
-		for (int i = 8; i > 0; i--){
-			display_row(0xFF0000, i, EYE1_PORT);
-			display_row(0xFF0000, 9 - i, EYE2_PORT);
+		for (int i = 7; i > 0; i--){
+			clear();
+			display_row(0xFF0000, i);
+			display_row(0xFF0000, (15 - i));
 			leds.show();
 			delay(80 - i * 3);
 		}
 		break;
 	case K2000:
 		for (int i = 1 - overlap; i < 16 + overlap; i++) display_k2000_row(i);
-		for (int i = 16 + overlap; i > 1 - overlap; i--) display_k2000_row(i);
+		for (int i = 16 + overlap; i > 1 - overlap; i--) display_k2000_row(i, -1);
 		break;
 	case HEART:
 		switch_sprite(iris, heart01);
