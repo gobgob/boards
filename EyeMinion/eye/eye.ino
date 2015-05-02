@@ -208,6 +208,16 @@ void rainbow(int phaseShift, int cycleTime)
 }
 
 /**
+ * Clear all leds
+**/
+void clear()
+{
+	for (int i = 0; i < LED_COUNT; i++) {
+		leds.setPixel(i, 0);
+	}
+}
+
+/**
  * Switch between two sprite with a lid closing transition.
  *
  * @param const sprite_t &sprite_before
