@@ -454,6 +454,9 @@ int mode = 3; // Manuel
 
 /**
  * Capture and parse serial events.
+ * SerialEvent() is called after a loop(), if there is serial data in the buffer.
+ *
+ * Note: This livecycle is given by arduino framework ;)
  **/
 void serialEvent()
 {
@@ -490,6 +493,9 @@ void serialEvent()
  *   ## Version
  *   V
  *
+ *   ## Text
+ *   TPLOP -> display "PLOP"
+ *
  **/
 void serialExecute()
 {
@@ -503,6 +509,11 @@ void serialExecute()
 
 	case 'V': // Version - useful for autoconnect
 		Serial.println("MIB Eyes");
+		break;
+
+	case 'T': // Texte
+		Serial.println("Print text");
+		display_text(serialInput + 1);
 		break;
 
 	default:
