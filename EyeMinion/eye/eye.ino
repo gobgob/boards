@@ -25,7 +25,7 @@ pixel_t adjust_pixel_luminosity(pixel_t pixel_in, int luminosity_percent = 10)
 
 
 const uint8_t reverse_table[52][2] {
-				    {2, 0}, { 3, 0 }, { 4, 0 }, { 5, 0 },
+				    { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 },
 		  { 6, 1 }, { 5, 1 }, { 4, 1 }, { 3, 1 }, { 2, 1 }, { 1, 1 },
 { 0, 2 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 4, 2 }, { 5, 2 }, { 6, 2 }, { 7, 2 },
 { 7, 3 }, { 6, 3 }, { 5, 3 }, { 4, 3 }, { 3, 3 }, { 2, 3 }, { 1, 3 }, { 0, 3 },
@@ -83,7 +83,7 @@ void display_text(char * text, pixel_t color = 0xffffff)
 	int text_length = strlen(text);
 	for (int offset_x = -(ROW_COUNT * EYES_COUNT); offset_x < text_length * ROW_COUNT; offset_x++) {
 		for (int i = 0; i < LED_COUNT; i++) {
-			int offset_eye2 = (i > LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
+			int offset_eye2 = (i >= LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
 
 			pixel_t pix = 0;
 			for (int letter = 0; letter < text_length; letter++) {
@@ -318,6 +318,9 @@ void display_k2000_row(int i, int sign = 1)
 #define CLOSE_EYES  7
 #define LOOK_AROUND 8
 #define STATIC_EYES 9
+
+int animNum = 0;
+
 void animation(int anim)
 {
 	int overlap = 6;
@@ -444,13 +447,14 @@ void animation(int anim)
 		break;
 
 	}
+
+	// Default animation
+	if (animNum > 0 && anim == animNum) animNum = EYES;
 }
 
 // Serial
-char serialInput[10];
+char serialInput[100];
 int serialPrompt = 0;
-int animNum = 0;
-int mode = 3; // Manuel
 
 /**
  * Capture and parse serial events.
@@ -539,6 +543,10 @@ void setup()
 
 void loop()
 {
-	//display_text("OH YEAH");
-	animation(RAINBOW);
+	if (animNum > 0){
+		animation(animNum);
+	} else {
+		// Default animation waiting for first serial event
+		animation(K2000);
+	}
 }
