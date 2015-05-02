@@ -301,20 +301,6 @@ void animation(int anim)
 
 			display_sprite(&iris, EYE1_PORT);
 			display_sprite(&iris, EYE2_PORT);
-			display_sprite(&lid04, EYE1_PORT);
-			display_sprite(&lid04, EYE2_PORT);
-			leds.show();
-			delay(70);
-
-			display_sprite(&iris, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT);
-			display_sprite(&lid03, EYE1_PORT);
-			display_sprite(&lid03, EYE2_PORT);
-			leds.show();
-			delay(70);
-
-			display_sprite(&iris, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT);
 			display_sprite(&lid02, EYE1_PORT);
 			display_sprite(&lid02, EYE2_PORT);
 			leds.show();

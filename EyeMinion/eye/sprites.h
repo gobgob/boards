@@ -12,7 +12,6 @@ extern const sprite_t sprite_line;
 extern const sprite_t lid01;
 extern const sprite_t lid02;
 extern const sprite_t lid03;
-extern const sprite_t lid04;
 extern const sprite_t iris;
 
 #endif
