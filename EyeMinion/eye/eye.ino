@@ -215,6 +215,11 @@ void clear()
 	for (int i = 0; i < LED_COUNT; i++) {
 		leds.setPixel(i, 0);
 	}
+void flash()
+{
+	for (int i = 0; i < LED_COUNT; i++)
+		leds.setPixel(i, 0xFFFFFF);
+	leds.show();
 }
 
 /**
@@ -318,6 +323,7 @@ void display_k2000_row(int i, int sign = 1)
 #define CLOSE_EYES  7
 #define LOOK_AROUND 8
 #define STATIC_EYES 9
+#define FLASH       10
 
 int animNum = 0;
 
@@ -446,6 +452,9 @@ void animation(int anim)
 		delay(1000);
 		break;
 
+	case FLASH:
+		flash();
+		delay(70);
 	}
 
 	// Default animation
