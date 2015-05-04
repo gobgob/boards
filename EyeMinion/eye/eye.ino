@@ -324,6 +324,8 @@ void display_k2000_row(int i, int sign = 1)
 #define LOOK_AROUND 8
 #define STATIC_EYES 9
 #define FLASH       10
+#define LOOK_LEFT   11
+#define LOOK_RIGHT  12
 
 int animNum = 0;
 
@@ -418,6 +420,47 @@ void animation(int anim)
 
 		display_on_lid(iris);
 		delay(70);
+		break;
+	case LOOK_RIGHT:
+		for (int i = 0; i < 3; i++) {
+			display_sprite(&iris, EYE1_PORT, i, 0, true);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT, i, 0, true);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(100);
+		}
+		delay(900);
+		for (int i = 2; i > -1; i--) {
+			display_sprite(&iris, EYE1_PORT, i, 0, true);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT, i, 0, true);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(100);
+		}
+		delay(200);
+		break;
+
+	case LOOK_LEFT:
+		for (int i = 0; i > -3; i--) {
+			display_sprite(&iris, EYE1_PORT, i, 0, true);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT, i, 0, true);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(100);
+		}
+		delay(900);
+		for (int i = -2; i < 1; i++) {
+			display_sprite(&iris, EYE1_PORT, i, 0, true);
+			display_sprite(&lid01, EYE1_PORT);
+			display_sprite(&iris, EYE2_PORT, i, 0, true);
+			display_sprite(&lid01, EYE2_PORT);
+			leds.show();
+			delay(100);
+		}
+		delay(200);
 		break;
 	case LOOK_AROUND:
 		for (int i = 0; i < 3; i++) {
