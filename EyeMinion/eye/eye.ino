@@ -1,6 +1,6 @@
 #include <OctoWS2811.h>
 #include "eye.h"
-#include "sprite_letters.h"
+#include "spriteLetters.h"
 #include "sprites.h"
 
 DMAMEM int displayMemory[LED_COUNT_PER_EYE * 6];
@@ -11,20 +11,20 @@ OctoWS2811 leds(LED_COUNT_PER_EYE, displayMemory, drawingMemory, config);
 /**
  * Apply luminosity percent to a pixel
  *
- * @param  pixel_t pixel_in - pixel to set
- * @param  int [luminosity_percent = 10]
+ * @param  pixel_t pixel - pixel to set
+ * @param  int [intensityPercent = 10]
  * @return pixel_t
  **/
-pixel_t adjust_pixel_luminosity(pixel_t pixel_in, int luminosity_percent = 10)
+pixel_t adjustPixelIntensity(pixel_t pixel, int intensityPercent = 10)
 {
-	int r = (((pixel_in >> 16) & 0xFF)*luminosity_percent) / 100;
-	int g = (((pixel_in >> 8) & 0xFF)*luminosity_percent) / 100;
-	int b = (((pixel_in >> 0) & 0xFF)*luminosity_percent) / 100;
+	int r = (((pixel >> 16) & 0xFF) * intensityPercent) / 100;
+	int g = (((pixel >> 8) & 0xFF)  * intensityPercent) / 100;
+	int b = (((pixel >> 0) & 0xFF)  * intensityPercent) / 100;
 	return (r << 16) | (g << 8) | (b << 0);
 }
 
 
-const uint8_t reverse_table[52][2] {
+const uint8_t reverseTable[52][2] {
 				    { 2, 0 }, { 3, 0 }, { 4, 0 }, { 5, 0 },
 		  { 6, 1 }, { 5, 1 }, { 4, 1 }, { 3, 1 }, { 2, 1 }, { 1, 1 },
 { 0, 2 }, { 1, 2 }, { 2, 2 }, { 3, 2 }, { 4, 2 }, { 5, 2 }, { 6, 2 }, { 7, 2 },
@@ -36,68 +36,70 @@ const uint8_t reverse_table[52][2] {
 };
 
 /**
- * Display a sprite
+ * Add a sprite.
+ * Note: you must execute `leds.show()` to see the result ;)
  *
  * @param const sprite_t *sprite
- * @param int            [eye_port = 1] - Port where eye is connected (1 to 8)
- * @param int            [offset_x = 0]
- * @param int            [offset_y = 0]
+ * @param int            [eyePort = 1] - Port where eye is connected (1 to 8)
+ * @param int            [offsetX = 0]
+ * @param int            [offsetY = 0]
  * @param bool           [loop = false]
- * @param pixel_t        [transparent_color = 0xae8fad]
+ * @param pixel_t        [alphaColor = 0xae8fad] - this color not erase pixel set before (useful for multi-layer management)
  **/
-void display_sprite(const sprite_t *sprite, int eye_port = 1, int offset_x = 0, int offset_y = 0, bool loop = false, pixel_t transparent_color = 0xae8fad)
+void addSprite(const sprite_t *sprite, int eyePort = 1, int offsetX = 0, int offsetY = 0, bool loop = false, pixel_t alphaColor = 0xae8fad)
 {
-	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i < (LED_COUNT_PER_EYE * eye_port); i++) {
+	for (int i = 0 + LED_COUNT_PER_EYE * (eyePort - 1); i < (LED_COUNT_PER_EYE * eyePort); i++) {
 		pixel_t pix;
-		int x = reverse_table[i % LED_COUNT_PER_EYE][0] - offset_y;
-		int y = reverse_table[i % LED_COUNT_PER_EYE][1] - offset_x;
-		bool is_in_matrice = (y >= 0 && y < LINE_COUNT && x >= 0 && x < ROW_COUNT);
+		int x = reverseTable[i % LED_COUNT_PER_EYE][0] - offsetY;
+		int y = reverseTable[i % LED_COUNT_PER_EYE][1] - offsetX;
+		bool isInMatrice = (y >= 0 && y < LINE_COUNT && x >= 0 && x < ROW_COUNT);
 
-		if (loop || is_in_matrice) {
+		if (loop || isInMatrice) {
 			pix = (*sprite)[x % LINE_COUNT][y % ROW_COUNT];
 		}
 		else {
 			pix = 0;
 		}
 
-		if (pix != transparent_color) {
-			pix = adjust_pixel_luminosity(pix);
+		if (pix != alphaColor) {
+			pix = adjustPixelIntensity(pix);
 			leds.setPixel(i, pix);
 		}
 	}
 }
 
 /**
- * Display a text
+ * Display a text with left-right scrolling runAnimation.
+ * Note: Only caps letters implement for instant.
  *
  * @param char *text
  * @param pixel_t  [color = 0xffffff]
  *
  * Example:
- * display_text("abc");
+ * printText("ABC");
  *  => Display ABC on eye
  *
  **/
-void display_text(char * text, pixel_t color = 0xffffff)
+void printText(char * text, pixel_t color = 0xffffff)
 {
 	int text_length = strlen(text);
-	for (int offset_x = -(ROW_COUNT * EYES_COUNT); offset_x < text_length * ROW_COUNT; offset_x++) {
+	for (int offsetX = -(ROW_COUNT * EYES_COUNT); offsetX < text_length * ROW_COUNT; offsetX++) {
 		for (int i = 0; i < LED_COUNT; i++) {
 			int offset_eye2 = (i >= LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
 
 			pixel_t pix = 0;
 			for (int letter = 0; letter < text_length; letter++) {
-				int x = reverse_table[i % LED_COUNT_PER_EYE][0];
-				int y = reverse_table[i % LED_COUNT_PER_EYE][1] + offset_x - letter * 6 + offset_eye2;
-				sprite_t * sprite_letter = letters[text[letter]];
-				bool is_in_matrice = (y >= 0 && y < ROW_COUNT);
-				if (is_in_matrice && sprite_letter != NULL){
-					if ((*sprite_letter)[x][y]){
+				int x = reverseTable[i % LED_COUNT_PER_EYE][0];
+				int y = reverseTable[i % LED_COUNT_PER_EYE][1] + offsetX - letter * 6 + offset_eye2;
+				sprite_t * spriteLetter = letters[text[letter]];
+				bool isInMatrice = (y >= 0 && y < ROW_COUNT);
+				if (isInMatrice && spriteLetter != NULL){
+					if ((*spriteLetter)[x][y]){
 						pix = color;
 					}
 				}
 			}
-			pix = adjust_pixel_luminosity(pix);
+			pix = adjustPixelIntensity(pix);
 			leds.setPixel(i, pix);
 		}
 		leds.show();
@@ -106,37 +108,39 @@ void display_text(char * text, pixel_t color = 0xffffff)
 }
 
 /**
- * Display a color on all leds
+ * Add a background color.
+ * Note: you must execute `leds.show()` to see the result ;)
  *
  * @param pixel_t color
- * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
+ * @param int [eyePort = 1] - Port where eye is connected (1 to 8)
  **/
-void display_color(pixel_t color, int eye_port = 1)
+void addBackgroundColor(pixel_t color, int eyePort = 1)
 {
-	color = adjust_pixel_luminosity(color);
-	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i < (LED_COUNT_PER_EYE * eye_port); i++) {
+	color = adjustPixelIntensity(color);
+	for (int i = 0 + LED_COUNT_PER_EYE * (eyePort - 1); i < (LED_COUNT_PER_EYE * eyePort); i++) {
 		leds.setPixel(i, color);
 	}
 }
 
 /**
- * Display single row in one color
+ * Add single row in one color.
+ * Note: you must execute `leds.show()` to see the result ;)
  *
  * @param pixel_t color
  * @param uint8_t row
  **/
-void display_row(pixel_t color, uint8_t row)
+void addColorRow(pixel_t color, uint8_t row)
 {
 	for (int i = 0; i < LED_COUNT; i++) {
 		int offset_eye2 = (i >= LED_COUNT_PER_EYE * (EYE2_PORT - 1)) ? EYE2_OFFSET : 0;
-		int x = reverse_table[i % LED_COUNT_PER_EYE][0];
-		int y = (reverse_table[i % LED_COUNT_PER_EYE][1] - row + offset_eye2);
-		bool is_in_matrice = (y >= 0 && y < ROW_COUNT);
-		if (is_in_matrice){
+		int x = reverseTable[i % LED_COUNT_PER_EYE][0];
+		int y = (reverseTable[i % LED_COUNT_PER_EYE][1] - row + offset_eye2);
+		bool isInMatrice = (y >= 0 && y < ROW_COUNT);
+		if (isInMatrice){
 			pixel_t pix = (sprite_row)[x][y];
 			if (pix) {
 				pix = color;
-				pix = adjust_pixel_luminosity(pix);
+				pix = adjustPixelIntensity(pix);
 				leds.setPixel(i, pix);
 			}
 		}
@@ -144,19 +148,22 @@ void display_row(pixel_t color, uint8_t row)
 }
 
 /**
- * Display single line in one color
+ * Add single line in one color
+ * Note: you must execute `leds.show()` to see the result ;)
  *
  * @param pixel_t color
  * @param uint8_t line
- * @param int [eye_port = 1] - Port where eye is connected (1 to 8)
+ * @param int [eyePort = 1] - Port where eye is connected (1 to 8)
  **/
-void display_line(pixel_t color, uint8_t line, int eye_port = 1)
+void addColorLine(pixel_t color, uint8_t line, int eyePort = 1)
 {
-	for (int i = 0 + LED_COUNT_PER_EYE * (eye_port - 1); i < (LED_COUNT_PER_EYE * eye_port); i++) {
-		pixel_t pix = (sprite_line)[(reverse_table[i % LED_COUNT_PER_EYE][0] + line) % LINE_COUNT][reverse_table[i % LED_COUNT_PER_EYE][1]];
-		if (pix) pix = color;
-		pix = adjust_pixel_luminosity(pix);
-		leds.setPixel(i, pix);
+	for (int i = 0 + LED_COUNT_PER_EYE * (eyePort - 1); i < (LED_COUNT_PER_EYE * eyePort); i++) {
+		pixel_t pix = (sprite_line)[(reverseTable[i % LED_COUNT_PER_EYE][0] + line) % LINE_COUNT][reverseTable[i % LED_COUNT_PER_EYE][1]];
+		if (pix) {
+			pix = color;
+			pix = adjustPixelIntensity(pix);
+			leds.setPixel(i, pix);
+		}
 	}
 }
 
@@ -166,7 +173,7 @@ int rainbowColors[180];
 /**
  * Pre-compute rainbow colors
  **/
-void precompute_rainbow_colors()
+void precomputeRainbowColors()
 {
 	for (int i = 0; i < 180; i++) {
 		int hue = i * 2;
@@ -208,13 +215,19 @@ void rainbow(int phaseShift, int cycleTime)
 }
 
 /**
- * Clear all leds
+ * Clear all leds (buffer only)
 **/
 void clear()
 {
-	for (int i = 0; i < LED_COUNT; i++) {
+	for (int i = 0; i < LED_COUNT; i++)
 		leds.setPixel(i, 0);
-	}
+}
+
+
+/**
+ * Set and show all leds in white (intensity max!)
+ * /!\ Don’t look leds without sunglasses in this mode /!\
+**/
 void flash()
 {
 	for (int i = 0; i < LED_COUNT; i++)
@@ -228,40 +241,40 @@ void flash()
  * @param const sprite_t &sprite_before
  * @param const sprite_t &sprite_after
  **/
-void switch_sprite(const sprite_t &sprite_before, const sprite_t &sprite_after)
+void switchSprite(const sprite_t &sprite_before, const sprite_t &sprite_after)
 {
-	display_sprite(&sprite_before, EYE1_PORT);
-	display_sprite(&sprite_before, EYE2_PORT);
-	display_sprite(&lid01, EYE1_PORT);
-	display_sprite(&lid01, EYE2_PORT);
+	addSprite(&sprite_before, EYE1_PORT);
+	addSprite(&sprite_before, EYE2_PORT);
+	addSprite(&lid01, EYE1_PORT);
+	addSprite(&lid01, EYE2_PORT);
 	leds.show();
 	delay(70);
 
-	display_sprite(&sprite_before, EYE1_PORT);
-	display_sprite(&sprite_before, EYE2_PORT);
-	display_sprite(&lid02, EYE1_PORT);
-	display_sprite(&lid02, EYE2_PORT);
+	addSprite(&sprite_before, EYE1_PORT);
+	addSprite(&sprite_before, EYE2_PORT);
+	addSprite(&lid02, EYE1_PORT);
+	addSprite(&lid02, EYE2_PORT);
 	leds.show();
 	delay(70);
 
-	display_sprite(&sprite_before, EYE1_PORT);
-	display_sprite(&sprite_before, EYE2_PORT);
-	display_sprite(&lid03, EYE1_PORT);
-	display_sprite(&lid03, EYE2_PORT);
+	addSprite(&sprite_before, EYE1_PORT);
+	addSprite(&sprite_before, EYE2_PORT);
+	addSprite(&lid03, EYE1_PORT);
+	addSprite(&lid03, EYE2_PORT);
 	leds.show();
 	delay(70);
 
-	display_sprite(&sprite_after, EYE1_PORT);
-	display_sprite(&sprite_after, EYE2_PORT);
-	display_sprite(&lid02, EYE1_PORT);
-	display_sprite(&lid02, EYE2_PORT);
+	addSprite(&sprite_after, EYE1_PORT);
+	addSprite(&sprite_after, EYE2_PORT);
+	addSprite(&lid02, EYE1_PORT);
+	addSprite(&lid02, EYE2_PORT);
 	leds.show();
 	delay(70);
 
-	display_sprite(&sprite_after, EYE1_PORT);
-	display_sprite(&sprite_after, EYE2_PORT);
-	display_sprite(&lid01, EYE1_PORT);
-	display_sprite(&lid01, EYE2_PORT);
+	addSprite(&sprite_after, EYE1_PORT);
+	addSprite(&sprite_after, EYE2_PORT);
+	addSprite(&lid01, EYE1_PORT);
+	addSprite(&lid01, EYE2_PORT);
 	leds.show();
 	delay(70);
 }
@@ -271,12 +284,12 @@ void switch_sprite(const sprite_t &sprite_before, const sprite_t &sprite_after)
  *
  * @param const sprite_t &sprite
  **/
-void display_on_lid(const sprite_t &sprite)
+void displayOnLid(const sprite_t &sprite)
 {
-	display_sprite(&sprite, EYE1_PORT);
-	display_sprite(&sprite, EYE2_PORT);
-	display_sprite(&lid01, EYE1_PORT);
-	display_sprite(&lid01, EYE2_PORT);
+	addSprite(&sprite, EYE1_PORT);
+	addSprite(&sprite, EYE2_PORT);
+	addSprite(&lid01, EYE1_PORT);
+	addSprite(&lid01, EYE2_PORT);
 	leds.show();
 }
 
@@ -285,35 +298,35 @@ void display_on_lid(const sprite_t &sprite)
  *
  * @param const sprite_t &sprite
  **/
-void display_clone(const sprite_t &sprite)
+void displayClone(const sprite_t &sprite)
 {
-	display_sprite(&sprite, EYE1_PORT);
-	display_sprite(&sprite, EYE2_PORT);
+	addSprite(&sprite, EYE1_PORT);
+	addSprite(&sprite, EYE2_PORT);
 	leds.show();
 }
 
 
 /**
- * Display k2000 row.
+ * Display k2000 rows.
  *
  * @param int i
  **/
-void display_k2000_row(int i, int sign = 1)
+void displayK2000Rows(int i, int sign = 1)
 {
-	display_color(0x110000, EYE1_PORT);
-	display_color(0x110000, EYE2_PORT);
+	addBackgroundColor(0x110000, EYE1_PORT);
+	addBackgroundColor(0x110000, EYE2_PORT);
 
-	//display_row(0xFF0000, MIN(MAX(i, 0), 15));
-	display_row(0xFF0000, i);
-	display_row(0xCC0000, i - (1 * sign));
-	display_row(0xAA0000, i - (2 * sign));
-	display_row(0x550000, i - (3 * sign));
+	//addColorRow(0xFF0000, MIN(MAX(i, 0), 15));
+	addColorRow(0xFF0000, i);
+	addColorRow(0xCC0000, i - (1 * sign));
+	addColorRow(0xAA0000, i - (2 * sign));
+	addColorRow(0x550000, i - (3 * sign));
 	leds.show();
 	delay(50);
 }
 
 
-// ANIMATIONS
+// runAnimationS
 #define K2000       1
 #define HEART       2
 #define CLAP        3
@@ -329,7 +342,7 @@ void display_k2000_row(int i, int sign = 1)
 
 int animNum = 0;
 
-void animation(int anim)
+void runAnimation(int anim)
 {
 	int overlap = 6;
 	switch (anim)
@@ -337,49 +350,49 @@ void animation(int anim)
 	case SILON:
 		for (int i = 0; i < 8; i++){
 			clear();
-			display_row(0xFF0000, i);
-			display_row(0xFF0000, (15 - i));
+			addColorRow(0xFF0000, i);
+			addColorRow(0xFF0000, (15 - i));
 			leds.show();
 			delay(80 - i * 3);
 		}
 		for (int i = 7; i > 0; i--){
 			clear();
-			display_row(0xFF0000, i);
-			display_row(0xFF0000, (15 - i));
+			addColorRow(0xFF0000, i);
+			addColorRow(0xFF0000, (15 - i));
 			leds.show();
 			delay(80 - i * 3);
 		}
 		break;
 	case K2000:
-		for (int i = 1 - overlap; i < 16 + overlap; i++) display_k2000_row(i);
-		for (int i = 16 + overlap; i > 1 - overlap; i--) display_k2000_row(i, -1);
+		for (int i = 1 - overlap; i < 16 + overlap; i++) displayK2000Rows(i);
+		for (int i = 16 + overlap; i > 1 - overlap; i--) displayK2000Rows(i, -1);
 		break;
 	case HEART:
-		switch_sprite(iris, heart01);
-		display_on_lid(heart02);
+		switchSprite(iris, heart01);
+		displayOnLid(heart02);
 		delay(50);
 		for (int i = 0; i < 4; i++){
-			display_on_lid(heart03);
+			displayOnLid(heart03);
 			delay(200);
-			display_on_lid(heart04);
+			displayOnLid(heart04);
 			delay(200);
-			display_on_lid(heart03);
+			displayOnLid(heart03);
 			delay(200);
-			display_on_lid(heart04);
+			displayOnLid(heart04);
 			delay(1000);
 		}
 		delay(800);
-		switch_sprite(heart04, iris);
+		switchSprite(heart04, iris);
 		break;
 
 	case CLAP:
-		display_clone(clap_open);
+		displayClone(clap_open);
 		delay(500);
-		display_clone(clap_close);
+		displayClone(clap_close);
 		delay(250);
-		display_clone(clap_open);
+		displayClone(clap_open);
 		delay(500);
-		display_text("ACTION");
+		printText("ACTION");
 		break;
 
 	case RAINBOW:
@@ -387,55 +400,55 @@ void animation(int anim)
 		break;
 
 	case EYES:
-		animation(STATIC_EYES);
-		animation(LOOK_AROUND);
+		runAnimation(STATIC_EYES);
+		runAnimation(LOOK_AROUND);
 		delay(1000);
-		animation(CLOSE_EYES);
-		animation(CLOSE_EYES);
+		runAnimation(CLOSE_EYES);
+		runAnimation(CLOSE_EYES);
 		break;
 	case CLOSE_EYES:
-		display_on_lid(iris);
+		displayOnLid(iris);
 		delay(70);
 
-		display_sprite(&iris, EYE1_PORT);
-		display_sprite(&iris, EYE2_PORT);
-		display_sprite(&lid02, EYE1_PORT);
-		display_sprite(&lid02, EYE2_PORT);
+		addSprite(&iris, EYE1_PORT);
+		addSprite(&iris, EYE2_PORT);
+		addSprite(&lid02, EYE1_PORT);
+		addSprite(&lid02, EYE2_PORT);
 		leds.show();
 		delay(70);
 
-		display_sprite(&iris, EYE1_PORT);
-		display_sprite(&iris, EYE2_PORT);
-		display_sprite(&lid03, EYE1_PORT);
-		display_sprite(&lid03, EYE2_PORT);
+		addSprite(&iris, EYE1_PORT);
+		addSprite(&iris, EYE2_PORT);
+		addSprite(&lid03, EYE1_PORT);
+		addSprite(&lid03, EYE2_PORT);
 		leds.show();
 		delay(70);
 
-		display_sprite(&iris, EYE1_PORT);
-		display_sprite(&iris, EYE2_PORT);
-		display_sprite(&lid02, EYE1_PORT);
-		display_sprite(&lid02, EYE2_PORT);
+		addSprite(&iris, EYE1_PORT);
+		addSprite(&iris, EYE2_PORT);
+		addSprite(&lid02, EYE1_PORT);
+		addSprite(&lid02, EYE2_PORT);
 		leds.show();
 		delay(70);
 
-		display_on_lid(iris);
+		displayOnLid(iris);
 		delay(70);
 		break;
 	case LOOK_RIGHT:
 		for (int i = 0; i < 3; i++) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
 		delay(900);
 		for (int i = 2; i > -1; i--) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
@@ -444,19 +457,19 @@ void animation(int anim)
 
 	case LOOK_LEFT:
 		for (int i = 0; i > -3; i--) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
 		delay(900);
 		for (int i = -2; i < 1; i++) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
@@ -464,34 +477,34 @@ void animation(int anim)
 		break;
 	case LOOK_AROUND:
 		for (int i = 0; i < 3; i++) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
 		delay(200);
 		for (int i = 2; i > -3; i--) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
 		delay(200);
 		for (int i = -2; i < 1; i++) {
-			display_sprite(&iris, EYE1_PORT, i, 0, true);
-			display_sprite(&lid01, EYE1_PORT);
-			display_sprite(&iris, EYE2_PORT, i, 0, true);
-			display_sprite(&lid01, EYE2_PORT);
+			addSprite(&iris, EYE1_PORT, i, 0, true);
+			addSprite(&lid01, EYE1_PORT);
+			addSprite(&iris, EYE2_PORT, i, 0, true);
+			addSprite(&lid01, EYE2_PORT);
 			leds.show();
 			delay(100);
 		}
 		break;
 	case STATIC_EYES:
-		display_on_lid(iris);
+		displayOnLid(iris);
 		delay(1000);
 		break;
 
@@ -500,7 +513,7 @@ void animation(int anim)
 		delay(70);
 	}
 
-	// Default animation
+	// Default runAnimation
 	if (animNum > 0 && anim == animNum) animNum = EYES;
 }
 
@@ -543,8 +556,8 @@ void serialEvent()
  * Execute serial command (after `\n` char)
  *
  * # Commands
- *   ## Animations
- *   A01 -> animation 1
+ *   ## runAnimations
+ *   A01 -> runAnimation 1
  *
  *   ## Version
  *   V
@@ -557,7 +570,7 @@ void serialExecute()
 {
 	switch (serialInput[0])
 	{
-	case 'A': // Animation - `A01` for animation 1
+	case 'A': // runAnimation - `A01` for run animation 1
 		animNum = serialInput[1] * 10 + serialInput[2];
 		Serial.print("Run animation ");
 		Serial.println(animNum);
@@ -569,7 +582,7 @@ void serialExecute()
 
 	case 'T': // Texte
 		Serial.println("Print text");
-		display_text(serialInput + 1);
+		printText(serialInput + 1);
 		break;
 
 	default:
@@ -588,7 +601,7 @@ void setup()
 	leds.begin();
 	leds.show();
 
-	precompute_rainbow_colors();
+	precomputeRainbowColors();
 	Serial.begin(9600);
 }
 
@@ -596,9 +609,9 @@ void setup()
 void loop()
 {
 	if (animNum > 0){
-		animation(animNum);
+		runAnimation(animNum);
 	} else {
 		// Default animation waiting for first serial event
-		animation(K2000);
+		runAnimation(K2000);
 	}
 }
