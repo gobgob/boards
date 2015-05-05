@@ -586,7 +586,9 @@ void serialExecute()
 		break;
 
 	default:
-		Serial.println("Unkwnown command");
+		Serial.print("Unkwnown command (");
+		Serial.print(serialInput[0]);
+		Serial.println(")");
 	}
 
 	// Reset var for next instruction
