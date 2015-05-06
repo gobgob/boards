@@ -326,7 +326,7 @@ void displayK2000Rows(int i, int sign = 1)
 }
 
 
-// runAnimationS
+// Animations
 #define K2000       1
 #define HEART       2
 #define CLAP        3
@@ -339,6 +339,7 @@ void displayK2000Rows(int i, int sign = 1)
 #define FLASH       10
 #define LOOK_LEFT   11
 #define LOOK_RIGHT  12
+#define COUNT_DOWN  13
 
 int animNum = 0;
 
@@ -363,10 +364,12 @@ void runAnimation(int anim)
 			delay(80 - i * 3);
 		}
 		break;
+
 	case K2000:
 		for (int i = 1 - overlap; i < 16 + overlap; i++) displayK2000Rows(i);
 		for (int i = 16 + overlap; i > 1 - overlap; i--) displayK2000Rows(i, -1);
 		break;
+
 	case HEART:
 		switchSprite(iris, heart01);
 		displayOnLid(heart02);
@@ -406,6 +409,7 @@ void runAnimation(int anim)
 		runAnimation(CLOSE_EYES);
 		runAnimation(CLOSE_EYES);
 		break;
+
 	case CLOSE_EYES:
 		displayOnLid(iris);
 		delay(70);
@@ -434,6 +438,7 @@ void runAnimation(int anim)
 		displayOnLid(iris);
 		delay(70);
 		break;
+
 	case LOOK_RIGHT:
 		for (int i = 0; i < 3; i++) {
 			addSprite(&iris, EYE1_PORT, i, 0, true);
@@ -475,6 +480,7 @@ void runAnimation(int anim)
 		}
 		delay(200);
 		break;
+
 	case LOOK_AROUND:
 		for (int i = 0; i < 3; i++) {
 			addSprite(&iris, EYE1_PORT, i, 0, true);
@@ -503,6 +509,7 @@ void runAnimation(int anim)
 			delay(100);
 		}
 		break;
+
 	case STATIC_EYES:
 		displayOnLid(iris);
 		delay(1000);
@@ -511,6 +518,18 @@ void runAnimation(int anim)
 	case FLASH:
 		flash();
 		delay(70);
+		break;
+
+	case COUNT_DOWN:
+		for (int i = 5; i > -1; i++){
+			addBackgroundColor(rainbowColors[i * 10], EYE1_PORT);
+			addBackgroundColor(rainbowColors[i * 10], EYE2_PORT);
+			addSprite(letters[i], EYE1_PORT, 0, 0, false, 0xFFFFFF);
+			addSprite(letters[i], EYE2_PORT, 0, 0, false, 0xFFFFFF);
+			leds.show();
+			delay(1000);
+		}
+		break;
 	}
 
 	// Default runAnimation
