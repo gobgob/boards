@@ -340,6 +340,7 @@ void displayK2000Rows(int i, int sign = 1)
 #define LOOK_LEFT   11
 #define LOOK_RIGHT  12
 #define COUNT_DOWN  13
+#define PACMAN      14
 
 int animNum = 0;
 
@@ -521,13 +522,47 @@ void runAnimation(int anim)
 		break;
 
 	case COUNT_DOWN:
-		for (int i = 5; i > -1; i++){
+		for (int i = 5; i > -1; i--){
 			addBackgroundColor(rainbowColors[i * 10], EYE1_PORT);
 			addBackgroundColor(rainbowColors[i * 10], EYE2_PORT);
 			addSprite(letters[i], EYE1_PORT, 0, 0, false, 0xFFFFFF);
 			addSprite(letters[i], EYE2_PORT, 0, 0, false, 0xFFFFFF);
 			leds.show();
 			delay(1000);
+		}
+		break;
+
+	case PACMAN:
+		overlap = 0;
+		for (int i = -10; i < 16; i++){
+
+			// Ghosts
+			// TODO method to colorize sprite without using background color
+			//for (int j = 0; j < 3; j++) {
+			//	addSprite(&ghost, EYE1_PORT, 7 * j + 10, 0, false, 0x000000);
+			//	addSprite(&ghost, EYE1_PORT, 7 * j + 2, 0, false, 0x000000);
+			//}
+
+			// Dots
+			clear(); // TODO delete this when ghosts are functionnal
+			if (i % 4 == 0 && i > -5) overlap++;
+			for (int j = 0; j < 4; j++) {
+				addSprite(&dot, EYE1_PORT, (4 * overlap) + j * 4, 0, false, 0x000000);
+				addSprite(&dot, EYE2_PORT, (4 * overlap) + j * 4 - 8, 0, false, 0x000000);
+			}
+
+			// Pacman
+			if (i % 2) {
+				addSprite(&pacman_open, EYE1_PORT, i, 0, false, 0x000000);
+				addSprite(&pacman_open, EYE2_PORT, i - 8, 0, false, 0x000000);
+			}
+			else {
+				addSprite(&pacman_close, EYE1_PORT, i, 0, false, 0x000000);
+				addSprite(&pacman_close, EYE2_PORT, i - 8, 0, false, 0x000000);
+			}
+
+			leds.show();
+			delay(200);
 		}
 		break;
 	}
@@ -633,6 +668,14 @@ void loop()
 		runAnimation(animNum);
 	} else {
 		// Default animation waiting for first serial event
-		runAnimation(K2000);
+		runAnimation(PACMAN);
+		//for (int i = 0; i < 16; i++){
+		//	addBackgroundColor(rainbowColors[i * 5], EYE1_PORT);
+		//	addBackgroundColor(rainbowColors[i * 5], EYE2_PORT);
+		//	addSprite(&dot, EYE1_PORT, i, 0, false, 0xFFFFFF);
+		//	addSprite(&dot, EYE2_PORT, i - 8, 0, false, 0xFFFFFF);
+		//	leds.show();
+		//	delay(20);
+		//}
 	}
 }

@@ -19,4 +19,9 @@ extern const sprite_t lid02;
 extern const sprite_t lid03;
 extern const sprite_t iris;
 
+extern const sprite_t pacman_open;
+extern const sprite_t pacman_close;
+extern const sprite_t ghost;
+extern const sprite_t dot;
+
 #endif
