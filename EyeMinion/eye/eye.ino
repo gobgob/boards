@@ -658,6 +658,7 @@ void serialEvent()
  **/
 void serialExecute()
 {
+	pixel_t color;
 	switch (serialInput[0])
 	{
 	case 'A': // runAnimation - `A01` for run animation 1
@@ -675,6 +676,17 @@ void serialExecute()
 		printText(serialInput + 1);
 		break;
 
+	case 'C':
+		Serial.println("Show color");
+
+		if (serialInput[1] == 'G') color = 0x00FF00; // Green
+		else color = 0xffe300; // Yellow
+
+		addBackgroundColor(color, EYE1_PORT);
+		addBackgroundColor(color, EYE2_PORT);
+		leds.show();
+		delay(2000);
+		break;
 	default:
 		Serial.print("Unkwnown command (");
 		Serial.print(serialInput[0]);

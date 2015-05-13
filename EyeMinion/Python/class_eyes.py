@@ -56,10 +56,16 @@ class Eyes():
         self._run("A11")
 	def look_rigth(self):
 		self._run("A12")
-		
+
 	def text(self, text_to_display):
 		self._run("T"+text_to_display)
-    
+
+	def color(self, color_to_set):
+		if color_to_set == "green":
+			self._run("CG")
+		else:
+			self._run("CY")
+
     """
     ------------
     --- CORE ---
