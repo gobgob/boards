@@ -1,4 +1,4 @@
-#!/usr/bin/python
+#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 """
@@ -140,7 +140,7 @@ if __name__ == '__main__':
 	
 	eyes = Eyes()
 	while not quit:
-		cmd = raw_input(">>> ")
+		cmd = input(">>> ")
 		
 		if cmd in ["quit", "q", "exit", ":q"]:
 			quit = True
