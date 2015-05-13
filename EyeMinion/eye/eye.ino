@@ -69,6 +69,37 @@ void addSprite(const sprite_t *sprite, int eyePort = 1, int offsetX = 0, int off
 }
 
 /**
+* Add a sprite with a specific color.
+* Note: you must execute `leds.show()` to see the result ;)
+*
+* @param const sprite_t *sprite
+* @param int            [eyePort = 1] - Port where eye is connected (1 to 8)
+* @param int            [offsetX = 0]
+* @param int            [offsetY = 0]
+* @param bool           [loop = false]
+* @param pixel_t        [color = 0xff0000] color to add
+* @param pixel_t        [colorToReplace = 0xffffff] - color to replace
+**/
+void addColorSprite(const sprite_t *sprite, int eyePort = 1, int offsetX = 0, int offsetY = 0, bool loop = false, pixel_t color = 0xff0000, pixel_t colorToReplace = 0xffffff)
+{
+	for (int i = 0 + LED_COUNT_PER_EYE * (eyePort - 1); i < (LED_COUNT_PER_EYE * eyePort); i++) {
+		pixel_t pix;
+		int x = reverseTable[i % LED_COUNT_PER_EYE][0] - offsetY;
+		int y = reverseTable[i % LED_COUNT_PER_EYE][1] - offsetX;
+		bool isInMatrice = (y >= 0 && y < LINE_COUNT && x >= 0 && x < ROW_COUNT);
+
+		if (loop || isInMatrice) {
+			pix = (*sprite)[x % LINE_COUNT][y % ROW_COUNT];
+		}
+
+		if (pix == colorToReplace) {
+			pix = adjustPixelIntensity(color);
+			leds.setPixel(i, pix);
+		}
+	}
+}
+
+/**
  * Display a text with left-right scrolling runAnimation.
  * Note: Only caps letters implement for instant.
  *
