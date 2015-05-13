@@ -565,17 +565,22 @@ void runAnimation(int anim)
 
 	case PACMAN:
 		overlap = 0;
-		for (int i = -10; i < 16; i++){
-
+		for (int i = -10; i < 42; i++){
+			clear();
 			// Ghosts
-			// TODO method to colorize sprite without using background color
-			//for (int j = 0; j < 3; j++) {
-			//	addSprite(&ghost, EYE1_PORT, 7 * j + 10, 0, false, 0x000000);
-			//	addSprite(&ghost, EYE1_PORT, 7 * j + 2, 0, false, 0x000000);
-			//}
+			// Red
+			addColorSprite(&ghost, EYE1_PORT, -12 + i, 0, false, 0xf92b07);
+			addColorSprite(&ghost, EYE2_PORT, -12 + i - 8, 0, false, 0xf92b07);
+
+			// blue
+			addColorSprite(&ghost, EYE1_PORT, -20 + i, 0, false, 0x00fcff);
+			addColorSprite(&ghost, EYE2_PORT, -20 + i - 8, 0, false, 0x00fcff);
+
+			// pink
+			addColorSprite(&ghost, EYE1_PORT, -28 + i, 0, false, 0xfea2ce);
+			addColorSprite(&ghost, EYE2_PORT, -28 + i - 8, 0, false, 0xfea2ce);
 
 			// Dots
-			clear(); // TODO delete this when ghosts are functionnal
 			if (i % 4 == 0 && i > -5) overlap++;
 			for (int j = 0; j < 4; j++) {
 				addSprite(&dot, EYE1_PORT, (4 * overlap) + j * 4, 0, false, 0x000000);
@@ -700,13 +705,5 @@ void loop()
 	} else {
 		// Default animation waiting for first serial event
 		runAnimation(PACMAN);
-		//for (int i = 0; i < 16; i++){
-		//	addBackgroundColor(rainbowColors[i * 5], EYE1_PORT);
-		//	addBackgroundColor(rainbowColors[i * 5], EYE2_PORT);
-		//	addSprite(&dot, EYE1_PORT, i, 0, false, 0xFFFFFF);
-		//	addSprite(&dot, EYE2_PORT, i - 8, 0, false, 0xFFFFFF);
-		//	leds.show();
-		//	delay(20);
-		//}
 	}
 }
