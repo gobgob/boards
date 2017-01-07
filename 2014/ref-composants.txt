@@ -1,0 +1,25 @@
+molex male 
+4 pts : http://radiospares-fr.rs-online.com/web/p/embases-de-circuit-imprime/6795527/
+5 pts : http://radiospares-fr.rs-online.com/web/p/embases-de-circuit-imprime/6795521P/
+3 pts : http://radiospares-fr.rs-online.com/web/p/embases-de-circuit-imprime/6795524P/
+2 pts : http://radiospares-fr.rs-online.com/web/p/embases-de-circuit-imprime/6795515P/
+
+10 nF 0603 50V
+http://radiospares-fr.rs-online.com/web/p/condensateurs-ceramique-multicouche/7235679/
+
+100 nF 0603 50V
+http://radiospares-fr.rs-online.com/web/p/condensateurs-ceramique-multicouche/7882985/
+
+220 nF 0603 50V
+http://radiospares-fr.rs-online.com/web/p/condensateurs-ceramique-multicouche/7882997/
+
+bss138
+http://radiospares-fr.rs-online.com/web/p/transistors-mosfet/7384939/
+
+10k 0603
+http://radiospares-fr.rs-online.com/web/p/resistances-cms/7408892/
+
+
+GOTRONIC
+cable molex
+http://www.gotronic.fr/cat-circuits-imprimes-853.htm
